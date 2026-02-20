@@ -1,0 +1,19 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.env/
+
+# Model cache (optional, large files)
+.cache/
+*.pt
+*.bin
+
+# Evaluation outputs
+evaluation_results.csv
+
+# OS files
+.DS_Store
+Thumbs.db
