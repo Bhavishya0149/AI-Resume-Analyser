@@ -1,0 +1,50 @@
+server:
+  port: 8080
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://bhavishya0149:mongodbpassword@clustervoldo.rthg5.mongodb.net/resume_systeam?
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: wealthzofn@gmail.com
+    password: ceibjebaehiothqz
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+app:
+  jwt:
+    secret: 404E635266556A586E3272357GF8782F413F4428472B4B7250645367566B5970
+    expiration-ms: 86400000
+
+  resume:
+    max-count: 5
+    max-size-bytes: 5242880
+
+  temp-input:
+    max-size-bytes: 100000
+
+  otp:
+    expiry-minutes: 10
+    max-attempts: 5
+    resend-delay-seconds: 60
+
+  leaderboard:
+    max-user-entries: 100
+
+  google:
+    client-id: ${GOOGLE_CLIENT_ID}
+
+  profile-picture:
+    max-size-bytes: 2097152
+
+cloudinary:
+  cloud-name: dncnmrjkz
+  api-key: 248194812248412
+  api-secret: WXTTwdBPg2ycJK3fGIknGTPG2gA
