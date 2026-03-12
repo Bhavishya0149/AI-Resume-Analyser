@@ -4,6 +4,9 @@ import com.example.resumeai.config.AppProperties;
 import com.example.resumeai.dto.resume.ResumeResponse;
 import com.example.resumeai.entity.Resume;
 import com.example.resumeai.entity.enums.FileType;
+import com.example.resumeai.exception.ForbiddenException;
+import com.example.resumeai.exception.NotFoundException;
+import com.example.resumeai.exception.ApiException;
 import com.example.resumeai.repository.ResumeRepository;
 import com.example.resumeai.service.CloudinaryService;
 import com.example.resumeai.service.ResumeService;
@@ -32,11 +35,11 @@ public class ResumeServiceImpl implements ResumeService {
         String userId = SecurityUtil.getCurrentUserId();
 
         if (resumeRepository.countByUserId(userId) >= appProperties.getResume().getMaxCount()) {
-            throw new RuntimeException("Resume limit reached");
+            throw new ApiException("Resume limit reached");
         }
 
         if (file.getSize() > appProperties.getResume().getMaxSizeBytes()) {
-            throw new RuntimeException("File too large");
+            throw new ApiException("File too large");
         }
 
         FileType fileType = getFileType(file.getOriginalFilename());
@@ -47,7 +50,7 @@ public class ResumeServiceImpl implements ResumeService {
         try {
             extractedText = tika.parseToString(file.getInputStream());
         } catch (Exception e) {
-            throw new RuntimeException("Text extraction failed");
+            throw new ApiException("Text extraction failed");
         }
 
         Resume resume = Resume.builder()
@@ -91,10 +94,10 @@ public class ResumeServiceImpl implements ResumeService {
         String userId = SecurityUtil.getCurrentUserId();
 
         Resume resume = resumeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Resume not found"));
+                .orElseThrow(() -> new NotFoundException("Resume not found"));
 
         if (!resume.getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized");
+            throw new ForbiddenException("Unauthorized");
         }
 
         cloudinaryService.deleteFile(resume.getCloudinaryUrl());
@@ -104,7 +107,7 @@ public class ResumeServiceImpl implements ResumeService {
 
     private FileType getFileType(String fileName) {
 
-        if (fileName == null) throw new RuntimeException("Invalid file");
+        if (fileName == null) throw new ApiException("Invalid file");
 
         String lower = fileName.toLowerCase();
 
@@ -112,6 +115,6 @@ public class ResumeServiceImpl implements ResumeService {
         if (lower.endsWith(".docx")) return FileType.DOCX;
         if (lower.endsWith(".txt")) return FileType.TXT;
 
-        throw new RuntimeException("Unsupported file type");
+        throw new ApiException("Unsupported file type");
     }
 }

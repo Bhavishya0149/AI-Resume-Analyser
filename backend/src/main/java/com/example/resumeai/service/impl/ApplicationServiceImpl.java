@@ -4,6 +4,9 @@ import com.example.resumeai.dto.ai.AiResult;
 import com.example.resumeai.entity.Application;
 import com.example.resumeai.entity.JobPosting;
 import com.example.resumeai.entity.Resume;
+import com.example.resumeai.exception.ConflictException;
+import com.example.resumeai.exception.ForbiddenException;
+import com.example.resumeai.exception.NotFoundException;
 import com.example.resumeai.repository.ApplicationRepository;
 import com.example.resumeai.repository.JobPostingRepository;
 import com.example.resumeai.repository.ResumeRepository;
@@ -31,18 +34,18 @@ public class ApplicationServiceImpl implements ApplicationService {
         String userId = SecurityUtil.getCurrentUserId();
 
         JobPosting job = jobPostingRepository.findById(jobId)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
+                .orElseThrow(() -> new NotFoundException("Job not found"));
 
         if (!Boolean.TRUE.equals(job.getAllowApplications())) {
-            throw new RuntimeException("Applications not allowed");
+            throw new ForbiddenException("Applications not allowed");
         }
 
         if (applicationRepository.findByUserIdAndJobPostingId(userId, jobId).isPresent()) {
-            throw new RuntimeException("Already applied");
+            throw new ConflictException("Already applied");
         }
 
         Resume resume = resumeRepository.findById(resumeId)
-                .orElseThrow(() -> new RuntimeException("Resume not found"));
+                .orElseThrow(() -> new NotFoundException("Resume not found"));
 
         AiResult result = aiService.analyze(resume.getExtractedText(), job.getDescriptionText());
 

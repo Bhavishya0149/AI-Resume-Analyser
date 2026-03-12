@@ -5,8 +5,11 @@ import com.example.resumeai.dto.job.JobResponse;
 import com.example.resumeai.entity.JobPosting;
 import com.example.resumeai.entity.User;
 import com.example.resumeai.entity.enums.Role;
+import com.example.resumeai.exception.ForbiddenException;
+import com.example.resumeai.exception.NotFoundException;
 import com.example.resumeai.repository.JobPostingRepository;
 import com.example.resumeai.repository.UserRepository;
+import com.example.resumeai.repository.ApplicationRepository;
 import com.example.resumeai.service.JobService;
 import com.example.resumeai.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ public class JobServiceImpl implements JobService {
 
     private final JobPostingRepository jobPostingRepository;
     private final UserRepository userRepository;
+	private final ApplicationRepository applicationRepository;
 
     @Override
     public JobResponse createJob(JobCreateRequest request) {
@@ -28,13 +32,13 @@ public class JobServiceImpl implements JobService {
         String userId = SecurityUtil.getCurrentUserId();
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         boolean canCreatePublic = user.getRoles().contains(Role.ADMIN)
                 || Boolean.TRUE.equals(user.getRecruiterVerified());
 
         if (Boolean.TRUE.equals(request.getIsPublic()) && !canCreatePublic) {
-            throw new RuntimeException("Not allowed to create public job");
+            throw new ForbiddenException("Not allowed to create public job");
         }
 
         JobPosting job = JobPosting.builder()
@@ -80,4 +84,27 @@ public class JobServiceImpl implements JobService {
                         .build())
                 .toList();
     }
+
+    @Override
+	public void deleteJob(String jobId) {
+
+		String userId = SecurityUtil.getCurrentUserId();
+
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new NotFoundException("User not found"));
+
+		JobPosting job = jobPostingRepository.findById(jobId)
+				.orElseThrow(() -> new NotFoundException("Job not found"));
+
+		boolean isAdmin = user.getRoles().contains(Role.ADMIN);
+		boolean isCreator = job.getCreatedBy().equals(userId);
+
+		if (!isAdmin && !isCreator) {
+			throw new ForbiddenException("You are not allowed to delete this job");
+		}
+
+		applicationRepository.deleteByJobPostingId(jobId);
+
+		jobPostingRepository.delete(job);
+	}
 }

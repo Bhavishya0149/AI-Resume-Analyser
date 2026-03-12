@@ -11,4 +11,6 @@ public interface ApplicationRepository extends MongoRepository<Application, Stri
     Optional<Application> findByUserIdAndJobPostingId(String userId, String jobPostingId);
 
     List<Application> findByJobPostingIdOrderByQualificationScoreDesc(String jobPostingId);
+
+    void deleteByJobPostingId(String jobPostingId);
 }

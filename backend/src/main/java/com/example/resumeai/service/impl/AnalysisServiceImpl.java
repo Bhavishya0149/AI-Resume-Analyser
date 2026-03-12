@@ -3,6 +3,7 @@ package com.example.resumeai.service.impl;
 import com.example.resumeai.dto.ai.AiResult;
 import com.example.resumeai.entity.AnalysisHistory;
 import com.example.resumeai.entity.Resume;
+import com.example.resumeai.exception.NotFoundException;
 import com.example.resumeai.repository.AnalysisHistoryRepository;
 import com.example.resumeai.repository.ResumeRepository;
 import com.example.resumeai.service.AiService;
@@ -31,7 +32,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
         if (resumeId != null) {
             Resume resume = resumeRepository.findById(resumeId)
-                    .orElseThrow(() -> new RuntimeException("Resume not found"));
+                    .orElseThrow(() -> new NotFoundException("Resume not found"));
             finalResumeText = resume.getExtractedText();
         }
 

@@ -2,6 +2,7 @@ package com.example.resumeai.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.example.resumeai.exception.ApiException;
 import com.example.resumeai.service.CloudinaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
             return result.get("secure_url").toString();
 
         } catch (Exception e) {
-            throw new RuntimeException("Cloudinary upload failed");
+            throw new ApiException("Cloudinary upload failed");
         }
     }
 
@@ -37,7 +38,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
             cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
 
         } catch (Exception e) {
-            throw new RuntimeException("Cloudinary delete failed");
+            throw new ApiException("Cloudinary delete failed");
         }
     }
 

@@ -40,7 +40,23 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void signup(SignupRequest request) {
 
-        if (userRepository.existsByEmail(request.getEmail())) {
+        String email = request.getEmail();
+        String password = request.getPassword();
+        String name = request.getName();
+
+        if(email == null || email == ""){
+            throw new ForbiddenException("Email cannot be empty");
+        }
+
+        if(password == null || password.length() < 1){
+            throw new ForbiddenException("Password cannot be empty");
+        }
+
+        if(name == null || name.length() < 1){
+            throw new ForbiddenException("Name cannot be empty");
+        }
+
+        if (userRepository.existsByEmail(email)) {
             throw new ConflictException("Email already exists");
         }
 
@@ -200,6 +216,11 @@ public class AuthServiceImpl implements AuthService {
         if (user.getPasswordResetTokenExpiry() == null ||
                 user.getPasswordResetTokenExpiry().isBefore(Instant.now())) {
             throw new ForbiddenException("Reset token expired");
+        }
+
+        String newPassword = request.getNewPassword();
+        if(newPassword == null || newPassword.length() < 1){
+            throw new ForbiddenException("Password cannot be empty");
         }
 
         user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));

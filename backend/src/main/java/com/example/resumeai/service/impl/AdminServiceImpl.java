@@ -3,6 +3,7 @@ package com.example.resumeai.service.impl;
 import com.example.resumeai.entity.JobPosting;
 import com.example.resumeai.entity.User;
 import com.example.resumeai.entity.enums.Role;
+import com.example.resumeai.exception.NotFoundException;
 import com.example.resumeai.repository.JobPostingRepository;
 import com.example.resumeai.repository.UserRepository;
 import com.example.resumeai.service.AdminService;
@@ -20,7 +21,7 @@ public class AdminServiceImpl implements AdminService {
     public void verifyRecruiter(String userId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         user.getRoles().add(Role.RECRUITER);
         user.setRecruiterVerified(true);
@@ -32,7 +33,7 @@ public class AdminServiceImpl implements AdminService {
     public void revokeRecruiter(String userId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         user.getRoles().remove(Role.RECRUITER);
         user.setRecruiterVerified(false);
@@ -44,7 +45,7 @@ public class AdminServiceImpl implements AdminService {
     public void deactivateJob(String jobId) {
 
         JobPosting job = jobPostingRepository.findById(jobId)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
+                .orElseThrow(() -> new NotFoundException("Job not found"));
 
         job.setIsActive(false);
 

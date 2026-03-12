@@ -12,4 +12,6 @@ public interface JobService {
     List<JobResponse> getPublicJobs();
 
     List<JobResponse> getMyJobs();
+
+    void deleteJob(String jobId);
 }

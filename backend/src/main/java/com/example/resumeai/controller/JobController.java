@@ -29,4 +29,10 @@ public class JobController {
     public List<JobResponse> getMyJobs() {
         return jobService.getMyJobs();
     }
+
+    @DeleteMapping("/{jobId}")
+    public String deleteJob(@PathVariable String jobId) {
+        jobService.deleteJob(jobId);
+        return "Job deleted successfully";
+    }
 }
