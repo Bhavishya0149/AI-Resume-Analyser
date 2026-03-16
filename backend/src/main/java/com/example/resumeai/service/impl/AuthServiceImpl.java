@@ -118,8 +118,9 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse login(LoginRequest request) {
 
         if (request.getGoogleIdToken() != null) {
-
+            System.out.println("GOOGLE LOGIN!" + request.getGoogleIdToken());
             String email = googleAuthService.verifyTokenAndGetEmail(request.getGoogleIdToken());
+            System.out.println("GOOGLE LOGIN " + email);
 
             User user = userRepository.findByEmail(email).orElseGet(() -> {
 
@@ -139,10 +140,12 @@ public class AuthServiceImpl implements AuthService {
             });
 
             if (user.getAuthProvider() == AuthProvider.LOCAL) {
+                System.out.println("Account registered with email/password. Use normal login.");
                 throw new ConflictException(
                         "Account registered with email/password. Use normal login."
                 );
             }
+            System.out.println("SUCCESSFUL LOGIN!");
 
             String token = jwtUtil.generateToken(
                     user.getId(),

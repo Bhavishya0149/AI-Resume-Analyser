@@ -16,10 +16,10 @@ public class AiServiceImpl implements AiService {
         double score = ThreadLocalRandom.current().nextDouble(50, 90);
 
         return AiResult.builder()
-                .tfidfSimilarity(score)
-                .embeddingSimilarity(score + 2)
-                .skillMatchPercentage(score - 5)
-                .qualificationScore(score)
+                .tfidfSimilarity(43.00)
+                .embeddingSimilarity(37.00)
+                .skillMatchPercentage(66.6)
+                .qualificationScore(score / 100)
                 .matchedSkills(List.of("Java", "Spring"))
                 .missingSkills(List.of("Docker"))
                 .build();

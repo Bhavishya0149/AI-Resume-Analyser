@@ -17,6 +17,7 @@ public class GoogleAuthServiceImpl implements GoogleAuthService {
 
     public GoogleAuthServiceImpl(AppProperties appProperties) {
         this.clientId = appProperties.getGoogle().getClientId();
+        System.out.println("CLIENT IDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD = " + clientId);
     }
 
     @Override
