@@ -65,3 +65,20 @@ class ResumeAnalyzerPipeline:
             "matched_skills": sorted(list(matched_skills)),
             "missing_skills": sorted(list(missing_skills)),
         }
+
+print("START")
+resume_text = """
+Experienced Python developer with knowledge of machine learning, NLP, and SQL.
+Worked with TensorFlow and scikit-learn.
+"""
+
+jd_text = """
+Looking for a Python developer skilled in machine learning, NLP, and databases.
+Experience with TensorFlow preferred.
+"""
+
+print("START2")
+pipeline = ResumeAnalyzerPipeline()
+result = pipeline.analyze(resume_text, jd_text)
+
+print(result)

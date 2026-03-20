@@ -44,15 +44,15 @@ public class AuthServiceImpl implements AuthService {
         String password = request.getPassword();
         String name = request.getName();
 
-        if(email == null || email == ""){
+        if (email == null || email.isBlank()) {
             throw new ForbiddenException("Email cannot be empty");
         }
 
-        if(password == null || password.length() < 1){
+        if (password == null || password.isBlank()) {
             throw new ForbiddenException("Password cannot be empty");
         }
 
-        if(name == null || name.length() < 1){
+        if (name == null || name.isBlank()) {
             throw new ForbiddenException("Name cannot be empty");
         }
 
@@ -63,15 +63,15 @@ public class AuthServiceImpl implements AuthService {
         String otp = otpUtil.generateOtp();
 
         User user = User.builder()
-                .email(request.getEmail())
-                .passwordHash(passwordEncoder.encode(request.getPassword()))
+                .email(email)
+                .passwordHash(passwordEncoder.encode(password))
                 .authProvider(AuthProvider.LOCAL)
                 .isEmailVerified(false)
                 .otpCode(otp)
                 .otpExpiresAt(Instant.now().plusSeconds(appProperties.getOtp().getExpiryMinutes() * 60L))
                 .otpAttemptsLeft(appProperties.getOtp().getMaxAttempts())
                 .otpResendAvailableAt(Instant.now().plusSeconds(appProperties.getOtp().getResendDelaySeconds()))
-                .name(request.getName())
+                .name(name)
                 .roles(Set.of(Role.USER))
                 .recruiterVerified(false)
                 .isActive(true)
@@ -117,35 +117,52 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse login(LoginRequest request) {
 
-        if (request.getGoogleIdToken() != null) {
-            System.out.println("GOOGLE LOGIN!" + request.getGoogleIdToken());
-            String email = googleAuthService.verifyTokenAndGetEmail(request.getGoogleIdToken());
-            System.out.println("GOOGLE LOGIN " + email);
+        if (request.getGoogleIdToken() != null && !request.getGoogleIdToken().isBlank()) {
 
-            User user = userRepository.findByEmail(email).orElseGet(() -> {
+            GoogleAuthService.GoogleUser googleUser =
+                    googleAuthService.verifyToken(request.getGoogleIdToken());
 
-                User newUser = User.builder()
-                        .email(email)
-                        .authProvider(AuthProvider.GOOGLE)
-                        .isEmailVerified(true)
-                        .name(email.split("@")[0])
-                        .roles(Set.of(Role.USER))
-                        .recruiterVerified(false)
-                        .isActive(true)
-                        .createdAt(Instant.now())
-                        .updatedAt(Instant.now())
-                        .build();
+            String email = googleUser.getEmail();
+            String sub = googleUser.getSub();
+            String name = googleUser.getName();
 
-                return userRepository.save(newUser);
-            });
+            User user = userRepository.findByGoogleSub(sub).orElse(null);
 
-            if (user.getAuthProvider() == AuthProvider.LOCAL) {
-                System.out.println("Account registered with email/password. Use normal login.");
-                throw new ConflictException(
-                        "Account registered with email/password. Use normal login."
-                );
+            if (user == null) {
+
+                User emailUser = userRepository.findByEmail(email).orElse(null);
+
+                if (emailUser != null) {
+
+                    // 3. If account was created with password, block Google login
+                    if (emailUser.getAuthProvider() == AuthProvider.LOCAL) {
+                        throw new ConflictException(
+                                "Account registered with email/password. Use normal login."
+                        );
+                    }
+
+                    // 4. If account already exists with Google, reuse it
+                    user = emailUser;
+
+                } else {
+
+                    // 5. Create new Google user
+                    user = User.builder()
+                            .email(email)
+                            .googleSub(sub)
+                            .authProvider(AuthProvider.GOOGLE)
+                            .isEmailVerified(true)
+                            .name(name)
+                            .roles(Set.of(Role.USER))
+                            .recruiterVerified(false)
+                            .isActive(true)
+                            .createdAt(Instant.now())
+                            .updatedAt(Instant.now())
+                            .build();
+
+                    userRepository.save(user);
+                }
             }
-            System.out.println("SUCCESSFUL LOGIN!");
 
             String token = jwtUtil.generateToken(
                     user.getId(),
@@ -156,6 +173,7 @@ public class AuthServiceImpl implements AuthService {
             return buildResponse(user, token);
         }
 
+        // PASSWORD LOGIN
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UnauthorizedException("Invalid credentials"));
 
@@ -197,9 +215,7 @@ public class AuthServiceImpl implements AuthService {
             String token = generateResetToken();
 
             user.setPasswordResetToken(token);
-            user.setPasswordResetTokenExpiry(
-                    Instant.now().plusSeconds(15 * 60)
-            );
+            user.setPasswordResetTokenExpiry(Instant.now().plusSeconds(15 * 60));
             user.setUpdatedAt(Instant.now());
 
             userRepository.save(user);
@@ -222,11 +238,12 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String newPassword = request.getNewPassword();
-        if(newPassword == null || newPassword.length() < 1){
+
+        if (newPassword == null || newPassword.isBlank()) {
             throw new ForbiddenException("Password cannot be empty");
         }
 
-        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
         user.setPasswordResetToken(null);
         user.setPasswordResetTokenExpiry(null);
         user.setUpdatedAt(Instant.now());

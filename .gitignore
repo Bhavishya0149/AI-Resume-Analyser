@@ -1,2 +1,5 @@
 backend/src/main/resources/application.properties
 backend\src\main\resources\application.properties
+
+dump_files.py
+output.txt

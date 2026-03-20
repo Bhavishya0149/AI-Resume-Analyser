@@ -42,6 +42,8 @@ public class User {
     private String passwordResetToken;
     private Instant passwordResetTokenExpiry;
 
+    private String googleSub;
+
     private Instant createdAt;
     private Instant updatedAt;
 }
