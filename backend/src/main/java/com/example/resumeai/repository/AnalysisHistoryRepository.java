@@ -8,4 +8,6 @@ import java.util.List;
 public interface AnalysisHistoryRepository extends MongoRepository<AnalysisHistory, String> {
 
     List<AnalysisHistory> findByUserIdOrderByCreatedAtDesc(String userId);
+
+    void deleteByUserId(String userId);
 }

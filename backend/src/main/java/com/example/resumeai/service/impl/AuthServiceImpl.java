@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -60,6 +61,8 @@ public class AuthServiceImpl implements AuthService {
             throw new ConflictException("Email already exists");
         }
 
+        Role role = "RECRUITER".equalsIgnoreCase(request.getRequestedRole()) ? Role.RECRUITER : Role.USER;
+
         String otp = otpUtil.generateOtp();
 
         User user = User.builder()
@@ -72,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
                 .otpAttemptsLeft(appProperties.getOtp().getMaxAttempts())
                 .otpResendAvailableAt(Instant.now().plusSeconds(appProperties.getOtp().getResendDelaySeconds()))
                 .name(name)
-                .roles(Set.of(Role.USER))
+                .roles(new HashSet<>(Set.of(role)))
                 .recruiterVerified(false)
                 .isActive(true)
                 .createdAt(Instant.now())
@@ -134,26 +137,23 @@ public class AuthServiceImpl implements AuthService {
 
                 if (emailUser != null) {
 
-                    // 3. If account was created with password, block Google login
                     if (emailUser.getAuthProvider() == AuthProvider.LOCAL) {
                         throw new ConflictException(
                                 "Account registered with email/password. Use normal login."
                         );
                     }
 
-                    // 4. If account already exists with Google, reuse it
                     user = emailUser;
 
                 } else {
 
-                    // 5. Create new Google user
                     user = User.builder()
                             .email(email)
                             .googleSub(sub)
                             .authProvider(AuthProvider.GOOGLE)
                             .isEmailVerified(true)
                             .name(name)
-                            .roles(Set.of(Role.USER))
+                            .roles(new HashSet<>(Set.of(Role.USER)))
                             .recruiterVerified(false)
                             .isActive(true)
                             .createdAt(Instant.now())

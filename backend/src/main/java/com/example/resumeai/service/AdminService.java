@@ -1,5 +1,7 @@
 package com.example.resumeai.service;
 
+import com.example.resumeai.dto.admin.AdminPanelResponse;
+
 public interface AdminService {
 
     void verifyRecruiter(String userId);
@@ -7,4 +9,6 @@ public interface AdminService {
     void revokeRecruiter(String userId);
 
     void deactivateJob(String jobId);
+
+    AdminPanelResponse getAdminPanel();
 }

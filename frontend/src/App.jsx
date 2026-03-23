@@ -5,14 +5,12 @@ import ProtectedRoute from './components/ProtectedRoute'
 import RoleRoute from './components/RoleRoute'
 import LoadingSpinner from './components/LoadingSpinner'
 
-// Eager-loaded auth pages
 import LoginPage             from './pages/auth/LoginPage'
 import SignupPage            from './pages/auth/SignupPage'
 import VerifyEmailPage       from './pages/auth/VerifyEmailPage'
 import ResetPasswordRequest  from './pages/auth/ResetPasswordRequestPage'
 import ResetPasswordPage     from './pages/auth/ResetPasswordPage'
 
-// Lazy-loaded main pages
 const DashboardPage     = lazy(() => import('./pages/DashboardPage'))
 const ResumesPage       = lazy(() => import('./pages/ResumesPage'))
 const JobListingsPage   = lazy(() => import('./pages/jobs/JobListingsPage'))
@@ -22,6 +20,7 @@ const CreateJobPage     = lazy(() => import('./pages/jobs/CreateJobPage'))
 const MyJobsPage        = lazy(() => import('./pages/jobs/MyJobsPage'))
 const AnalyzePage       = lazy(() => import('./pages/AnalyzePage'))
 const HistoryPage       = lazy(() => import('./pages/HistoryPage'))
+const AnalysisDetailPage = lazy(() => import('./pages/AnalysisDetailPage'))
 const ProfilePage       = lazy(() => import('./pages/ProfilePage'))
 const AdminPage         = lazy(() => import('./pages/AdminPage'))
 
@@ -33,14 +32,12 @@ export default function App() {
   return (
     <Suspense fallback={<Fallback />}>
       <Routes>
-        {/* Public routes */}
         <Route path="/login"                  element={<LoginPage />} />
         <Route path="/signup"                 element={<SignupPage />} />
         <Route path="/verify-email"           element={<VerifyEmailPage />} />
         <Route path="/reset-password-request" element={<ResetPasswordRequest />} />
         <Route path="/reset-password"         element={<ResetPasswordPage />} />
 
-        {/* Authenticated routes inside Layout */}
         <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route path="/dashboard"             element={<DashboardPage />} />
           <Route path="/resumes"               element={<ResumesPage />} />
@@ -55,6 +52,7 @@ export default function App() {
           <Route path="/jobs/:id/leaderboard"  element={<JobLeaderboard />} />
           <Route path="/analyze"               element={<AnalyzePage />} />
           <Route path="/history"               element={<HistoryPage />} />
+          <Route path="/history/:id"           element={<AnalysisDetailPage />} />
           <Route path="/profile"               element={<ProfilePage />} />
           <Route path="/admin"                 element={
             <RoleRoute allowedRoles={['ADMIN']}>

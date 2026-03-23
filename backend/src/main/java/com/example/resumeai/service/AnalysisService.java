@@ -9,4 +9,8 @@ public interface AnalysisService {
     AiResult compare(String resumeId, String resumeText, String jdText);
 
     List<?> getHistory();
+
+    void deleteHistoryEntry(String entryId);
+
+    void deleteAllHistory(String targetUserId);
 }

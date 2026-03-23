@@ -4,29 +4,24 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorAlert from '../components/ErrorAlert'
 
 export default function AdminPage() {
-  const [users, setUsers]   = useState([])
-  const [jobs, setJobs]     = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError]   = useState('')
-  const [success, setSuccess] = useState('')
+  const [panel, setPanel]       = useState(null)   // { jobs: [], recruiters: [] }
+  const [loading, setLoading]   = useState(true)
+  const [error, setError]       = useState('')
+  const [success, setSuccess]   = useState('')
+  const [quickId, setQuickId]   = useState('')
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [usersRes, jobsRes] = await Promise.allSettled([
-          api.get('/api/users'),        // If admin user-list endpoint exists
-          api.get('/api/jobs/public'),
-        ])
-        if (usersRes.status === 'fulfilled') setUsers(usersRes.value.data)
-        if (jobsRes.status === 'fulfilled')  setJobs(jobsRes.value.data)
-      } catch {
-        setError('Failed to load admin data.')
-      } finally {
-        setLoading(false)
-      }
+  const fetchPanel = async () => {
+    try {
+      const { data } = await api.get('/api/admin/panel')
+      setPanel(data)
+    } catch {
+      setError('Failed to load admin panel data.')
+    } finally {
+      setLoading(false)
     }
-    fetchData()
-  }, [])
+  }
+
+  useEffect(() => { fetchPanel() }, [])
 
   const act = async (label, fn) => {
     setError('')
@@ -34,132 +29,217 @@ export default function AdminPage() {
     try {
       await fn()
       setSuccess(`${label} — done!`)
+      await fetchPanel()   // refresh panel after every action
     } catch (err) {
-      setError(err.response?.data?.message || err.response?.data || `${label} failed.`)
+      setError(err.response?.data?.error || err.response?.data?.message || `${label} failed.`)
     }
   }
 
-  const verifyRecruiter  = (id) => act('Verify recruiter',  () => api.patch(`/api/admin/users/${id}/verify-recruiter`))
-  const revokeRecruiter  = (id) => act('Revoke recruiter',  () => api.patch(`/api/admin/users/${id}/revoke-recruiter`))
-  const deactivateJob    = (id) => act('Deactivate job',    () => api.patch(`/api/admin/jobs/${id}/deactivate`))
+  const verifyRecruiter = (id) =>
+    act('Verify recruiter', () => api.patch(`/api/admin/users/${id}/verify-recruiter`))
+
+  const revokeRecruiter = (id) =>
+    act('Revoke recruiter', () => api.patch(`/api/admin/users/${id}/revoke-recruiter`))
+
+  const deactivateJob = (id) =>
+    act('Deactivate job', () => api.patch(`/api/admin/jobs/${id}/deactivate`))
 
   if (loading) return <LoadingSpinner text="Loading admin panel…" />
+
+  const jobs       = panel?.jobs       || []
+  const recruiters = panel?.recruiters || []
+
+  const activeJobs    = jobs.filter(j => j.isActive)
+  const inactiveJobs  = jobs.filter(j => !j.isActive)
+  const verifiedRec   = recruiters.filter(r => r.recruiterVerified)
+  const unverifiedRec = recruiters.filter(r => !r.recruiterVerified)
 
   return (
     <div>
       <div className="page-header">
         <h1 className="page-title">🛡 <span>Admin</span> Panel</h1>
+        <button className="btn btn-secondary btn-sm" onClick={fetchPanel}>
+          🔄 Refresh
+        </button>
       </div>
 
       <ErrorAlert message={error} onClose={() => setError('')} />
       {success && (
-        <div className="alert alert-success" style={{ marginBottom: '1rem' }}>✅ {success}</div>
+        <div className="alert alert-success" style={{ marginBottom: '1rem' }}>
+          ✅ {success}
+        </div>
       )}
 
-      {/* ── User Management ─────────────────────────── */}
-      <div className="admin-section">
-        <div className="admin-section-title">👥 User Management</div>
-
-        {users.length === 0 ? (
-          <div className="card">
-            <p style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>
-              No user list endpoint available, or no users found.
-              Use the quick-action form below to target a user by ID.
-            </p>
+      {/* Stats summary */}
+      <div className="stats-grid" style={{ marginBottom: '2rem' }}>
+        <div className="stat-card">
+          <div className="stat-value">{jobs.length}</div>
+          <div className="stat-label">Total Jobs</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{activeJobs.length}</div>
+          <div className="stat-label">Active Jobs</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{recruiters.length}</div>
+          <div className="stat-label">Recruiters</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value" style={{ color: unverifiedRec.length > 0 ? 'var(--warn)' : 'var(--success)' }}>
+            {unverifiedRec.length}
           </div>
-        ) : (
-          <div className="table-wrapper card" style={{ padding: 0, overflow: 'hidden' }}>
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Roles</th>
-                  <th>Verified</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map(u => (
-                  <tr key={u.id}>
-                    <td>{u.name}</td>
-                    <td style={{ fontSize: '0.82rem' }}>{u.email}</td>
-                    <td>
-                      {u.roles?.join(', ')}
-                    </td>
-                    <td>
-                      {u.recruiterVerified
-                        ? <span style={{ color: 'var(--success)' }}>✔ Yes</span>
-                        : <span style={{ color: 'var(--muted)' }}>No</span>
-                      }
-                    </td>
-                    <td>
-                      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                        <button
-                          className="btn btn-sm btn-primary"
-                          onClick={() => verifyRecruiter(u.id)}
-                        >
-                          Verify
-                        </button>
-                        <button
-                          className="btn btn-sm btn-danger"
-                          onClick={() => revokeRecruiter(u.id)}
-                        >
-                          Revoke
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="stat-label">Pending Verification</div>
+        </div>
+      </div>
+
+      {/* ── Recruiter Management ──────────────────────── */}
+      <div className="admin-section">
+        <div className="admin-section-title">👥 Recruiter Management</div>
+
+        {/* Pending verification first */}
+        {unverifiedRec.length > 0 && (
+          <div style={{ marginBottom: '1rem' }}>
+            <div style={{
+              fontSize: '0.78rem', fontWeight: 700, color: 'var(--warn)',
+              textTransform: 'uppercase', letterSpacing: '0.06em',
+              marginBottom: '0.5rem',
+            }}>
+              ⏳ Pending Verification ({unverifiedRec.length})
+            </div>
+            {unverifiedRec.map(r => (
+              <RecruiterRow
+                key={r.id}
+                recruiter={r}
+                onVerify={verifyRecruiter}
+                onRevoke={revokeRecruiter}
+                highlight
+              />
+            ))}
+          </div>
+        )}
+
+        {verifiedRec.length > 0 && (
+          <div>
+            <div style={{
+              fontSize: '0.78rem', fontWeight: 700, color: 'var(--success)',
+              textTransform: 'uppercase', letterSpacing: '0.06em',
+              marginBottom: '0.5rem',
+            }}>
+              ✔ Verified ({verifiedRec.length})
+            </div>
+            {verifiedRec.map(r => (
+              <RecruiterRow
+                key={r.id}
+                recruiter={r}
+                onVerify={verifyRecruiter}
+                onRevoke={revokeRecruiter}
+              />
+            ))}
+          </div>
+        )}
+
+        {recruiters.length === 0 && (
+          <div className="card">
+            <p style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>No recruiter accounts found.</p>
           </div>
         )}
       </div>
 
-      {/* ── Quick Action by User ID ──────────────────── */}
-      <QuickUserAction
-        onVerify={verifyRecruiter}
-        onRevoke={revokeRecruiter}
-      />
+      {/* ── Quick Action by ID ────────────────────────── */}
+      <div className="card" style={{ marginBottom: '2rem', maxWidth: 500 }}>
+        <h3 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '1rem' }}>
+          ⚡ Quick Action by User ID
+        </h3>
+        <div className="form-group">
+          <label htmlFor="quick-uid">User ID</label>
+          <input
+            id="quick-uid"
+            type="text"
+            value={quickId}
+            onChange={e => setQuickId(e.target.value)}
+            placeholder="Paste user ID here"
+          />
+        </div>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={() => quickId && verifyRecruiter(quickId)}
+            disabled={!quickId}
+          >
+            ✔ Verify Recruiter
+          </button>
+          <button
+            className="btn btn-danger btn-sm"
+            onClick={() => quickId && revokeRecruiter(quickId)}
+            disabled={!quickId}
+          >
+            ✖ Revoke Recruiter
+          </button>
+        </div>
+      </div>
 
       {/* ── Job Management ───────────────────────────── */}
-      <div className="admin-section" style={{ marginTop: '2rem' }}>
+      <div className="admin-section">
         <div className="admin-section-title">💼 Job Management</div>
 
         {jobs.length === 0 ? (
           <div className="card">
-            <p style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>No active jobs found.</p>
+            <p style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>No jobs found.</p>
           </div>
         ) : (
-          <div className="table-wrapper card" style={{ padding: 0, overflow: 'hidden' }}>
-            <table>
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Job ID</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {jobs.map(j => (
-                  <tr key={j.id}>
-                    <td>{j.title}</td>
-                    <td style={{ fontFamily: 'monospace', fontSize: '0.78rem' }}>
-                      {j.id}
-                    </td>
-                    <td>
-                      <button
-                        className="btn btn-sm btn-danger"
-                        onClick={() => deactivateJob(j.id)}
-                      >
-                        Deactivate
-                      </button>
-                    </td>
+          <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+            <div className="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Visibility</th>
+                    <th>Status</th>
+                    <th>Applications</th>
+                    <th>Posted By</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {jobs.map(j => (
+                    <tr key={j.id}>
+                      <td style={{ fontWeight: 600 }}>{j.title}</td>
+                      <td>
+                        <StatusPill label={j.isPublic ? 'Public' : 'Private'} color={j.isPublic ? 'var(--accent)' : 'var(--muted)'} />
+                      </td>
+                      <td>
+                        <StatusPill
+                          label={j.isActive ? 'Active' : 'Inactive'}
+                          color={j.isActive ? 'var(--success)' : 'var(--danger)'}
+                        />
+                      </td>
+                      <td>
+                        <StatusPill
+                          label={j.allowApplications ? 'Open' : 'Closed'}
+                          color={j.allowApplications ? 'var(--success)' : 'var(--muted)'}
+                        />
+                      </td>
+                      <td style={{ fontFamily: 'monospace', fontSize: '0.78rem', color: 'var(--muted)' }}>
+                        {j.createdBy?.substring(0, 10)}…
+                      </td>
+                      <td>
+                        {j.isActive && (
+                          <button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => deactivateJob(j.id)}
+                          >
+                            Deactivate
+                          </button>
+                        )}
+                        {!j.isActive && (
+                          <span style={{ color: 'var(--muted)', fontSize: '0.8rem' }}>—</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>
@@ -167,40 +247,68 @@ export default function AdminPage() {
   )
 }
 
-/* ── Inline sub-component for quick ID-based actions ── */
-function QuickUserAction({ onVerify, onRevoke }) {
-  const [userId, setUserId] = useState('')
+/* ── Helper sub-components ────────────────────────────── */
 
+function StatusPill({ label, color }) {
   return (
-    <div className="card" style={{ marginTop: '1rem', maxWidth: 480 }}>
-      <h3 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '1rem' }}>
-        Quick Action by User ID
-      </h3>
-      <div className="form-group">
-        <label htmlFor="quick-uid">User ID</label>
-        <input
-          id="quick-uid"
-          type="text"
-          value={userId}
-          onChange={e => setUserId(e.target.value)}
-          placeholder="Paste user ID here"
-        />
+    <span style={{
+      padding: '0.2rem 0.55rem',
+      borderRadius: 20,
+      fontSize: '0.72rem',
+      fontWeight: 700,
+      color,
+      background: `${color}18`,
+      border: `1px solid ${color}44`,
+    }}>
+      {label}
+    </span>
+  )
+}
+
+function RecruiterRow({ recruiter: r, onVerify, onRevoke, highlight }) {
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '1rem',
+      padding: '0.85rem 1.1rem',
+      background: highlight ? 'rgba(245,158,11,0.06)' : 'var(--surface)',
+      border: `1px solid ${highlight ? 'rgba(245,158,11,0.3)' : 'var(--border)'}`,
+      borderRadius: 10,
+      marginBottom: '0.5rem',
+      flexWrap: 'wrap',
+    }}>
+      <div style={{
+        width: 36, height: 36,
+        borderRadius: '50%',
+        background: r.recruiterVerified ? 'rgba(62,207,142,0.15)' : 'rgba(245,158,11,0.15)',
+        border: `2px solid ${r.recruiterVerified ? 'var(--success)' : 'var(--warn)'}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontWeight: 700, fontSize: '0.85rem',
+        color: r.recruiterVerified ? 'var(--success)' : 'var(--warn)',
+        flexShrink: 0,
+      }}>
+        {r.name?.substring(0, 1).toUpperCase() || '?'}
       </div>
-      <div style={{ display: 'flex', gap: '0.5rem' }}>
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() => userId && onVerify(userId)}
-          disabled={!userId}
-        >
-          ✔ Verify Recruiter
-        </button>
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => userId && onRevoke(userId)}
-          disabled={!userId}
-        >
-          ✖ Revoke Recruiter
-        </button>
+      <div style={{ flex: 1, minWidth: 150 }}>
+        <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{r.name}</div>
+        <div style={{ color: 'var(--muted)', fontSize: '0.78rem' }}>{r.email}</div>
+      </div>
+      <StatusPill
+        label={r.recruiterVerified ? '✔ Verified' : '⏳ Unverified'}
+        color={r.recruiterVerified ? 'var(--success)' : 'var(--warn)'}
+      />
+      <div style={{ display: 'flex', gap: '0.4rem' }}>
+        {!r.recruiterVerified && (
+          <button className="btn btn-primary btn-sm" onClick={() => onVerify(r.id)}>
+            Verify
+          </button>
+        )}
+        {r.recruiterVerified && (
+          <button className="btn btn-danger btn-sm" onClick={() => onRevoke(r.id)}>
+            Revoke
+          </button>
+        )}
       </div>
     </div>
   )

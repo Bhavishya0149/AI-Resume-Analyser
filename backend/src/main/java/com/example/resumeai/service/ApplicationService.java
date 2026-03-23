@@ -9,4 +9,6 @@ public interface ApplicationService {
     AiResult applyToJob(String jobId, String resumeId);
 
     List<?> getLeaderboard(String jobId);
+
+    void removeFromLeaderboard(String jobId, String applicationId);
 }

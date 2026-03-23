@@ -1,5 +1,6 @@
 package com.example.resumeai.controller;
 
+import com.example.resumeai.dto.admin.AdminPanelResponse;
 import com.example.resumeai.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,5 +30,10 @@ public class AdminController {
     public String deactivateJob(@PathVariable String id) {
         adminService.deactivateJob(id);
         return "Job deactivated";
+    }
+
+    @GetMapping("/panel")
+    public AdminPanelResponse getAdminPanel() {
+        return adminService.getAdminPanel();
     }
 }

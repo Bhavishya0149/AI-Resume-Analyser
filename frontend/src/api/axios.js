@@ -5,23 +5,25 @@ const api = axios.create({
   timeout: 30000,
 })
 
-// Attach JWT on every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
+  if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
 
-// Redirect to login on 401
 api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
-      localStorage.removeItem('token')
-      localStorage.removeItem('user')
-      window.location.href = '/login'
+      const token = localStorage.getItem('token')
+      const AUTH_PATHS = ['/login', '/signup', '/verify-email', '/reset-password']
+      const onAuthPage = AUTH_PATHS.some(p => window.location.pathname.startsWith(p))
+
+      if (token && !onAuthPage) {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        window.location.replace('/login')
+      }
     }
     return Promise.reject(err)
   }

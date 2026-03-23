@@ -4,6 +4,7 @@ import com.example.resumeai.dto.user.UserProfileResponse;
 import com.example.resumeai.dto.user.UpdateUserRequest;
 import com.example.resumeai.entity.User;
 import com.example.resumeai.entity.enums.AuthProvider;
+import com.example.resumeai.entity.enums.Role;
 import com.example.resumeai.exception.ApiException;
 import com.example.resumeai.exception.ConflictException;
 import com.example.resumeai.exception.ForbiddenException;
@@ -112,6 +113,19 @@ public class UserServiceImpl implements UserService {
             user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
         }
 
+        if (request != null && request.getRequestedRole() != null && !request.getRequestedRole().isBlank()) {
+
+            String requestedRole = request.getRequestedRole().toUpperCase();
+
+            if ("USER".equals(requestedRole)) {
+                user.getRoles().remove(Role.RECRUITER);
+                user.getRoles().add(Role.USER);
+            } else if ("RECRUITER".equals(requestedRole)) {
+                user.getRoles().remove(Role.USER);
+                user.getRoles().add(Role.RECRUITER);
+            }
+        }
+
         user.setUpdatedAt(Instant.now());
         userRepository.save(user);
     }
@@ -122,5 +136,4 @@ public class UserServiceImpl implements UserService {
             throw new UnauthorizedException("Current password is incorrect");
         }
     }
-
 }

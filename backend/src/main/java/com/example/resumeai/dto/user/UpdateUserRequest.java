@@ -10,4 +10,6 @@ public class UpdateUserRequest {
     private String newEmail;
     private String newPassword;
     private String currentPassword;
+
+    private String requestedRole;
 }
