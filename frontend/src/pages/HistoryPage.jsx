@@ -5,7 +5,7 @@ import LoadingSpinner from '../components/LoadingSpinner'
 import ErrorAlert from '../components/ErrorAlert'
 
 function getGrade(score) {
-  const p = (score || 0) * 100
+  const p = (score || 0)
   if (p >= 85) return { label: 'A+', color: '#3ecf8e' }
   if (p >= 75) return { label: 'A',  color: '#3ecf8e' }
   if (p >= 65) return { label: 'B',  color: '#7c6af7' }
@@ -89,7 +89,8 @@ export default function HistoryPage() {
         <div>
           {history.map((item) => {
             const grade = getGrade(item.qualificationScore)
-            const pct   = Math.round((item.qualificationScore || 0) * 100)
+            const pct   = Math.round(item.qualificationScore || 0) // ✅ FIXED
+
             return (
               <div
                 key={item.id}

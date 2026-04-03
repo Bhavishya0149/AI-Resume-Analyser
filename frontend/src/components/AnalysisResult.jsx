@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import SkillBadge from './SkillBadge'
 
 function getGrade(score) {
-  const p = (score || 0) * 100
+  const p = (score || 0) // ✅ already in 0–100
   if (p >= 85) return { label: 'A+', color: '#3ecf8e' }
   if (p >= 75) return { label: 'A',  color: '#3ecf8e' }
   if (p >= 65) return { label: 'B',  color: '#7c6af7' }
@@ -11,7 +11,7 @@ function getGrade(score) {
 }
 
 function getVerdict(score) {
-  const p = (score || 0) * 100
+  const p = (score || 0) // ✅ no multiplication
   if (p >= 85) return 'Excellent fit! You match this role very well.'
   if (p >= 65) return 'Good match. Consider addressing the missing skills.'
   if (p >= 50) return 'Moderate match. Several skills need improvement.'
@@ -20,7 +20,7 @@ function getVerdict(score) {
 
 function CircularScore({ value }) {
   const [animated, setAnimated] = useState(0)
-  const pct  = Math.round((value || 0) * 100)
+  const pct  = Math.round(value || 0) // ✅ already percentage
   const r    = 54
   const circ = 2 * Math.PI * r
   const offset = circ - (animated / 100) * circ
@@ -55,7 +55,7 @@ function CircularScore({ value }) {
 }
 
 function MetricCard({ label, value, icon }) {
-  const pct = Math.round((value || 0) * 100)
+  const pct = Math.round(value || 0) // ✅ no multiplication
   const color = pct >= 70 ? 'var(--success)' : pct >= 40 ? 'var(--accent)' : 'var(--danger)'
   return (
     <div className="metric-card">
@@ -88,9 +88,9 @@ export default function AnalysisResult({ result }) {
 
       {/* Metric cards */}
       <div className="metric-cards-grid">
-        <MetricCard label="TF-IDF Similarity"    value={result.tfidfSimilarity}                    icon="📊" />
-        <MetricCard label="Embedding Similarity" value={result.embeddingSimilarity}                 icon="🧬" />
-        <MetricCard label="Skill Match"          value={(result.skillMatchPercentage || 0) / 100}  icon="🎯" />
+        <MetricCard label="TF-IDF Similarity"    value={result.tfidfSimilarity}        icon="📊" />
+        <MetricCard label="Embedding Similarity" value={result.embeddingSimilarity}     icon="🧬" />
+        <MetricCard label="Skill Match"          value={result.skillMatchPercentage}    icon="🎯" />
       </div>
 
       {/* Skills */}

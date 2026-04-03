@@ -11,7 +11,6 @@ export default function DashboardPage() {
   const [history, setHistory]   = useState([])
   const [loading, setLoading]   = useState(true)
 
-  // location.key changes every time the user navigates to /dashboard — forces refetch
   useEffect(() => {
     setLoading(true)
     const fetchData = async () => {
@@ -53,7 +52,7 @@ export default function DashboardPage() {
         <div className="stat-card">
           <div className="stat-value">
             {history.length > 0
-              ? ((history[0].qualificationScore || 0) * 100).toFixed(0) + '%'
+              ? (history[0].qualificationScore || 0).toFixed(0) + '%'
               : '—'
             }
           </div>
@@ -97,7 +96,7 @@ export default function DashboardPage() {
                 {new Date(item.createdAt).toLocaleDateString()}
               </span>
               <span style={{ fontWeight: 700, color: 'var(--accent)' }}>
-                {((item.qualificationScore || 0) * 100).toFixed(1)}% match →
+                {(item.qualificationScore || 0).toFixed(1)}% match → {}
               </span>
             </Link>
           ))

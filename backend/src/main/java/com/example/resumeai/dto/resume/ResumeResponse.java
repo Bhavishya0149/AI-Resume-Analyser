@@ -8,7 +8,6 @@ import java.time.Instant;
 @Data
 @Builder
 public class ResumeResponse {
-
     private String id;
     private String fileName;
     private Instant createdAt;

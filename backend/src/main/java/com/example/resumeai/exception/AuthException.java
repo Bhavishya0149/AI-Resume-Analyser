@@ -1,4 +1,4 @@
-package com.example.multiauth.exception;
+package com.example.resumeai.exception;
 
 public class AuthException extends RuntimeException {
     public AuthException(String message) {

@@ -1,4 +1,4 @@
-package com.example.multiauth.exception;
+package com.example.resumeai.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

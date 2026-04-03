@@ -16,7 +16,6 @@ class SkillExtractor:
         extracted_skills = set()
 
         for skill in self.skills:
-            # exact phrase match
             if skill in text:
                 extracted_skills.add(skill)
 
