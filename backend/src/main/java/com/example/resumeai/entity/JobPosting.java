@@ -18,11 +18,17 @@ public class JobPosting {
 
     private String createdBy;
     private String title;
-    private String descriptionText;
+    private String descriptionText;    
+
+    private String shortDescription;    
+    private String organisationName;   
 
     private Boolean isPublic;
     private Boolean allowApplications;
     private Boolean isActive;
+
+    private String contactEmail;        
+    private String contactPhone;        
 
     private Instant createdAt;
     private Instant updatedAt;

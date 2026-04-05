@@ -9,6 +9,8 @@ public interface UserService {
     UserProfileResponse getCurrentUserProfile();
 
     void updateCurrentUser(String userId,
-                       UpdateUserRequest request,
-                       MultipartFile profilePicture);
+                           UpdateUserRequest request,
+                           MultipartFile profilePicture);
+
+    void removeProfilePicture(String userId);
 }

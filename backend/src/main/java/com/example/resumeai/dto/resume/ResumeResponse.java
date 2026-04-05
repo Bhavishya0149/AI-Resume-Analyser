@@ -10,5 +10,6 @@ import java.time.Instant;
 public class ResumeResponse {
     private String id;
     private String fileName;
+    private String cloudinaryUrl;
     private Instant createdAt;
 }

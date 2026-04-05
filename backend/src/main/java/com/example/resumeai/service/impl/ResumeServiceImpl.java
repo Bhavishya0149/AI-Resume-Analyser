@@ -69,6 +69,7 @@ public class ResumeServiceImpl implements ResumeService {
         return ResumeResponse.builder()
                 .id(resume.getId())
                 .fileName(resume.getFileName())
+                .cloudinaryUrl(resume.getCloudinaryUrl())
                 .createdAt(resume.getCreatedAt())
                 .build();
     }
@@ -83,6 +84,7 @@ public class ResumeServiceImpl implements ResumeService {
                 .map(r -> ResumeResponse.builder()
                         .id(r.getId())
                         .fileName(r.getFileName())
+                        .cloudinaryUrl(r.getCloudinaryUrl())
                         .createdAt(r.getCreatedAt())
                         .build())
                 .toList();

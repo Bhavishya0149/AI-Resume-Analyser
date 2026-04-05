@@ -4,13 +4,11 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
-public class JobCreateRequest {
+public class JobUpdateRequest {
 
-    @NotBlank(message = "Title is required")
-    @Size(max = 200, message = "Title must not exceed 200 characters")
+    @Size(min = 1, max = 200, message = "Title must be between 1 and 200 characters")
     private String title;
 
-    @NotBlank(message = "Job description is required")
     private String descriptionText;
 
     @Size(max = 600, message = "Short description must not exceed 600 characters")
@@ -19,10 +17,7 @@ public class JobCreateRequest {
     @Size(max = 200, message = "Organisation name must not exceed 200 characters")
     private String organisationName;
 
-    @NotNull(message = "isPublic is required")
     private Boolean isPublic;
-
-    @NotNull(message = "allowApplications is required")
     private Boolean allowApplications;
 
     @Email(message = "Invalid contact email format")

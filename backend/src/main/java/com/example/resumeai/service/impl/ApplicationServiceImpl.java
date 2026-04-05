@@ -1,17 +1,12 @@
 package com.example.resumeai.service.impl;
 
 import com.example.resumeai.dto.ai.AiResult;
-import com.example.resumeai.entity.Application;
-import com.example.resumeai.entity.JobPosting;
-import com.example.resumeai.entity.Resume;
-import com.example.resumeai.entity.User;
+import com.example.resumeai.dto.application.LeaderboardEntryResponse;
+import com.example.resumeai.entity.*;
 import com.example.resumeai.entity.enums.Role;
 import com.example.resumeai.exception.ForbiddenException;
 import com.example.resumeai.exception.NotFoundException;
-import com.example.resumeai.repository.ApplicationRepository;
-import com.example.resumeai.repository.JobPostingRepository;
-import com.example.resumeai.repository.ResumeRepository;
-import com.example.resumeai.repository.UserRepository;
+import com.example.resumeai.repository.*;
 import com.example.resumeai.service.AiService;
 import com.example.resumeai.service.ApplicationService;
 import com.example.resumeai.util.SecurityUtil;
@@ -41,15 +36,24 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .orElseThrow(() -> new NotFoundException("Job not found"));
 
         if (!Boolean.TRUE.equals(job.getAllowApplications())) {
-            throw new ForbiddenException("Applications not allowed");
+            throw new ForbiddenException("This job is not accepting applications");
+        }
+
+        if (!Boolean.TRUE.equals(job.getIsActive())) {
+            throw new ForbiddenException("This job is no longer active");
         }
 
         Resume resume = resumeRepository.findById(resumeId)
                 .orElseThrow(() -> new NotFoundException("Resume not found"));
 
+        if (!resume.getUserId().equals(userId)) {
+            throw new ForbiddenException("You can only apply with your own resume");
+        }
+
         AiResult result = aiService.analyze(resume.getExtractedText(), job.getDescriptionText());
 
-        Optional<Application> existingOpt = applicationRepository.findByUserIdAndJobPostingId(userId, jobId);
+        Optional<Application> existingOpt = applicationRepository
+                .findByUserIdAndJobPostingId(userId, jobId);
 
         Application application;
 
@@ -79,13 +83,63 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
 
         applicationRepository.save(application);
-
         return result;
     }
 
     @Override
-    public List<Application> getLeaderboard(String jobId) {
-        return applicationRepository.findByJobPostingIdOrderByQualificationScoreDesc(jobId);
+    public List<LeaderboardEntryResponse> getLeaderboard(String jobId) {
+
+        String currentUserId = SecurityUtil.getCurrentUserId();
+
+        User currentUser = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        JobPosting job = jobPostingRepository.findById(jobId)
+                .orElseThrow(() -> new NotFoundException("Job not found"));
+
+        boolean isAdmin = currentUser.getRoles().contains(Role.ADMIN);
+        boolean isCreator = job.getCreatedBy().equals(currentUserId);
+        boolean canSeeAllResumes = isAdmin || isCreator;
+
+        List<Application> applications = applicationRepository
+                .findByJobPostingIdOrderByQualificationScoreDesc(jobId);
+
+        return applications.stream().map(app -> {
+
+            // Pull user profile live from DB (never cached in Application entity)
+            LeaderboardEntryResponse.UserSnapshot snapshot = userRepository
+                    .findById(app.getUserId())
+                    .map(u -> LeaderboardEntryResponse.UserSnapshot.builder()
+                            .id(u.getId())
+                            .name(u.getName())
+                            .profilePictureUrl(u.getProfilePictureUrl())
+                            .build())
+                    .orElse(null);
+
+            // Resume URL: visible to the applicant themselves, the creator, and admins
+            String resumeUrl = null;
+            boolean isOwnApplication = app.getUserId().equals(currentUserId);
+
+            if (canSeeAllResumes || isOwnApplication) {
+                resumeUrl = resumeRepository.findById(app.getResumeId())
+                        .map(Resume::getCloudinaryUrl)
+                        .orElse(null);
+            }
+
+            return LeaderboardEntryResponse.builder()
+                    .applicationId(app.getId())
+                    .qualificationScore(app.getQualificationScore())
+                    .tfidfSimilarity(app.getTfidfSimilarity())
+                    .embeddingSimilarity(app.getEmbeddingSimilarity())
+                    .skillMatchPercentage(app.getSkillMatchPercentage())
+                    .matchedSkills(app.getMatchedSkills())
+                    .missingSkills(app.getMissingSkills())
+                    .resumeUrl(resumeUrl)
+                    .appliedAt(app.getCreatedAt())
+                    .userProfile(snapshot)
+                    .build();
+
+        }).toList();
     }
 
     @Override
