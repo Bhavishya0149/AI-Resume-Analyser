@@ -1,33 +1,50 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { GoogleLogin } from '@react-oauth/google'
 import api from '../../api/axios'
 import ErrorAlert from '../../components/ErrorAlert'
+import { useAuth } from '../../context/AuthContext'
+import { useTheme } from '../../context/ThemeContext'
 
 export default function SignupPage() {
-  const [form, setForm] = useState({ name: '', email: '', password: '', requestedRole: 'USER' })
-  const [error, setError]     = useState('')
-  const [loading, setLoading] = useState(false)
+  const { login } = useAuth()
+  const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
 
-  const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
-
-  const setRole = (role) => setForm(f => ({ ...f, requestedRole: role }))
+  const [name, setName]               = useState('')
+  const [email, setEmail]             = useState('')
+  const [password, setPassword]       = useState('')
+  const [requestedRole, setRole]      = useState('USER')
+  const [loading, setLoading]         = useState(false)
+  const [error, setError]             = useState('')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-    const { name, email, password } = form
-    if (!name || !email || !password) {
-      setError('All fields are required.')
-      return
-    }
+    if (!name.trim())                       return setError('Full name is required.')
+    if (!email.trim())                      return setError('Email is required.')
+    if (!password || password.length < 6)   return setError('Password must be at least 6 characters.')
     setLoading(true)
     try {
-      await api.post('/api/auth/signup', form)
+      await api.post('/api/auth/signup', { name, email, password, requestedRole })
+      // Only navigate AFTER server confirms signup
       navigate('/verify-email', { state: { email } })
     } catch (err) {
-      const msg = err.response?.data?.error || err.response?.data?.message || err.response?.data || 'Signup failed.'
-      setError(typeof msg === 'string' ? msg : JSON.stringify(msg))
+      setError(err.response?.data?.error || err.response?.data?.message || 'Signup failed.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setError('')
+    setLoading(true)
+    try {
+      const { data } = await api.post('/api/auth/login', { googleIdToken: credentialResponse.credential })
+      login(data)
+      navigate('/dashboard', { replace: true })
+    } catch (err) {
+      setError(err.response?.data?.error || err.response?.data?.message || 'Google sign-in failed.')
     } finally {
       setLoading(false)
     }
@@ -35,79 +52,75 @@ export default function SignupPage() {
 
   return (
     <div className="auth-page">
+      <button className="theme-toggle" onClick={toggleTheme}
+        style={{ position: 'fixed', top: '1rem', right: '1rem' }} aria-label="Toggle theme">
+        {theme === 'dark' ? '☀️' : '🌙'}
+      </button>
+
       <div className="auth-card">
         <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
           <div style={{ fontSize: '2.5rem' }}>🧠</div>
           <div style={{ fontWeight: 700, fontSize: '1.2rem', color: 'var(--accent)' }}>ResumeAI</div>
         </div>
 
-        <h1 className="auth-title">Create account</h1>
-        <p className="auth-subtitle">Get started for free</p>
+        <h1 className="auth-title">Create your account</h1>
+        <p className="auth-subtitle">Start analyzing resumes in minutes</p>
 
         <ErrorAlert message={error} onClose={() => setError('')} />
 
-        <form onSubmit={handleSubmit} noValidate>
+        <form onSubmit={handleSubmit} noValidate autoComplete="off">
           <div className="form-group">
-            <label htmlFor="name">Full Name</label>
-            <input
-              id="name" name="name" type="text"
-              value={form.name} onChange={handleChange}
-              placeholder="John Doe" required
-            />
+            <label htmlFor="name">Full name</label>
+            <input id="name" type="text" value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="Your full name"
+              autoComplete="name" required disabled={loading} />
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email" name="email" type="email"
-              value={form.email} onChange={handleChange}
-              placeholder="you@example.com" required
-            />
+            <label htmlFor="email">Work email</label>
+            <input id="email" type="email" value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="name@company.com"
+              autoComplete="email" required disabled={loading} />
           </div>
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input
-              id="password" name="password" type="password"
-              value={form.password} onChange={handleChange}
-              placeholder="Create a strong password" required
-            />
+            <input id="password" type="password" value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="Min. 6 characters"
+              autoComplete="new-password" required disabled={loading} />
           </div>
 
-          {/* Role selection */}
-          <div className="form-group">
-            <label>I am signing up as a…</label>
+          <div style={{ marginBottom: '1.1rem' }}>
+            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: 'var(--muted)', marginBottom: '0.5rem' }}>
+              I want to…
+            </label>
             <div className="role-toggle">
-              <div
-                className={`role-option ${form.requestedRole === 'USER' ? 'active' : ''}`}
-                onClick={() => setRole('USER')}
-                role="button"
-                tabIndex={0}
-                onKeyDown={e => e.key === 'Enter' && setRole('USER')}
-              >
-                👤 Job Seeker
-              </div>
-              <div
-                className={`role-option ${form.requestedRole === 'RECRUITER' ? 'active' : ''}`}
-                onClick={() => setRole('RECRUITER')}
-                role="button"
-                tabIndex={0}
-                onKeyDown={e => e.key === 'Enter' && setRole('RECRUITER')}
-              >
-                🏢 Recruiter
-              </div>
+              <button type="button"
+                className={`role-option ${requestedRole === 'USER' ? 'active' : ''}`}
+                onClick={() => setRole('USER')}>
+                🎯 Find Jobs
+              </button>
+              <button type="button"
+                className={`role-option ${requestedRole === 'RECRUITER' ? 'active' : ''}`}
+                onClick={() => setRole('RECRUITER')}>
+                💼 Post Jobs
+              </button>
             </div>
-            {form.requestedRole === 'RECRUITER' && (
-              <div className="alert alert-warn" style={{ marginTop: 0 }}>
-                ⚠️ Recruiter accounts require admin verification before you can post public jobs.
-              </div>
-            )}
           </div>
 
           <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
-            {loading ? 'Creating account…' : 'Create Account'}
+            {loading ? '⏳ Creating account…' : 'Create Account →'}
           </button>
         </form>
+
+        <div className="divider">or continue with</div>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <GoogleLogin onSuccess={handleGoogleSuccess}
+            onError={() => setError('Google sign-in failed')} theme="outline" size="large" />
+        </div>
 
         <div className="auth-footer">
           Already have an account? <Link to="/login">Sign in</Link>

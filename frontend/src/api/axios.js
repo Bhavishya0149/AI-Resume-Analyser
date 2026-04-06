@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080',
-  timeout: 30000,
+  timeout: 60000,
 })
 
 api.interceptors.request.use((config) => {
@@ -14,7 +14,10 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
+    const status   = err.response?.status
+    const hasBody  = !!(err.response?.data?.error || err.response?.data?.message)
+
+    if (status === 401 && !hasBody) {
       const token = localStorage.getItem('token')
       const AUTH_PATHS = ['/login', '/signup', '/verify-email', '/reset-password']
       const onAuthPage = AUTH_PATHS.some(p => window.location.pathname.startsWith(p))
@@ -25,6 +28,7 @@ api.interceptors.response.use(
         window.location.replace('/login')
       }
     }
+
     return Promise.reject(err)
   }
 )

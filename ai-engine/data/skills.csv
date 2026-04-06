@@ -1,28 +1,4400 @@
 skill
-python
-java
+acob
+actionscript
+acu-cobol
+ada
+adaplex
+al
+algol
+angular typescript
+ansi c
+apex
+apl
+apple script
+arm assembler
+arm cortex v8/v9 assembler
+arm neon vector processing assembler
+asn.1
+assembler 8051
+assembler 8080
+assembler 8085
+assembler dsp563xx
+assembler h
+assembler mips r3000-r4000
+assembler motorola 6800
+assembler motorola 68000
+assembler powerpc
+assembler sun sparc
+assembler x86
+assembler z80
+awk
+baan c
+bash
+basic
+bat
+bos
+bourne shell
+business basic
+c
+c shell
+c#
+c/al
 c++
+cachéscript
+cassandra query language
+clarion abc
+clarion legacy
+clist
+clojure
+cobol
+cobol ii
+cobol/370
+cocoa
+coffeescript
+comal
+concorde xal
+csp
+css
+css3
+dart
+data analysis expressions
+data flex
+data manipulation language
+ddm
+delphi
+dl-i
+dom
+easytrieve +
+ecmascript
+ecmascript 5
+egl
+eiffel
+elixir
+embedded c
+erlang
+esql
+f#
+focus
+formula
+forth
+fortran
+g++
+gherkin
+go
+gosu
+graphql
+groovy
+haskell
+haxe
+high level shader language
+hsql
+html
+html5
+hypertalk
+iar c compiler
+ideal
+informix
+ingres
+jass
+java
+javafx script
+javascript
+jcl
+jpql
+jscript
+jython
+kornshell
+kotlin
+lexx/yacc
+lisp
+logo
+lotusscript
+lua
+majic/spel
+managed c++
+mapbasic
+matlab
+mdx
+meta language
+metaassembler
+microchip assembler
+microsoft visual basic
+microsoft visual basic .net
+modula 2
+modula 3
+mumps
+mxml
+natural
+oberon
+object pascal
+objective-c
+oml
+oo javascript
+openroad
+owl
+pascal
+perl
+perl script
+personaljava
+php
+php4
+php5
+php7
+pjl
+pl/1
+pl/m
+pl/sql
+plc7
+plex
+plm
+pnuts
+postscript
+power++
+powerhouse
+powerhouse qtp
+powerscript
+powershell
+powershell core
+pro iv
+progress
+prolog
+psf-afp
+python
+qbasic
+qml
+quicktime technologies
+r
+regex
+rexx
+rexx for os/2
+rm-cobol
+rpg
+rpg ile
+rpg-400
+ruby
+rust
+s@t markup language
+saml
+sap abap
+sas
+sas base
+sas batch
+sas online
+sas/sql
+sass
+scala
+scobol
+scss
+sdl/gr
+sdl/pr
+shell script
+simatic s5
+simatic s7
+simnet ii
+smalltalk
 sql
-machine learning
-deep learning
-data analysis
-nlp
-pandas
-numpy
-scikit learn
-tensorflow
-pytorch
-excel
-power bi
-tableau
-react
-node js
-spring boot
+sqr
+standard ml
+swift
+system51
+systemverilog
+tacl
+tcl-tk
+tex
+tool command language
+tpl
+t-sql
+ttcn
+typed assembly language
+typescript
+ucob
+uniface
+unified modeling language
+unix cobol
+unix shell
+u-sql
+vag
+vba
+vbscript
+verilog
+vhsic hardware description language
+vispro rexx
+visual foxpro
+visualforce
+wig
+wmlscript
+wolfram mathematica
+wonderware quickscript .net
+wsdl
+x++
+xaml
+xarc
+xml user interface language
+xpath
+xquery
+xsl
+xslt
+yaml
+.net compact framework
+3-tier
+active accessibility
+active directory
+active directory certificate services
+active directory federation services
+active directory service interface
+active server pages
+activex
+actor pattern
+ado
+ado.net
+advanced function presentation
+adverse media
+aes
+ajax
+altera fpga
+altera nios soft-core
+amazon api gateway
+amazon athena
+amazon cloudfront
+amazon cloudwatch
+amazon cognito
+amazon data pipeline
+amazon dynamodb
+amazon ec2
+amazon ecs
+amazon marketplace web service
+amazon s3
+amazon sagemaker
+amazon sqs
+amf
+amfphp
+andf
+apache activemq
+apache airflow
+apache avro
+apache axis2
+apache camel
+apache cxf
+apache felix
+apache hadoop
+apache hadoop common
+apache hadoop mapreduce
+apache hadoop yarn
+apache hdfs
+apache karaf
+apache knox gateway
+apache lucene
+apache mahout
+apache myfaces
+apache ranger
+apache solr
+apache spark
+apache storm
+apache streamsets
+apache xmlbeans
+apache zookeeper
+api
+aptix
+arcfm enterprise
+arcgis
+arcims
+arcmap
+arcobjects
+arcsde
+arcsight
+arcsight esm
+arcsight siem
+arcview
+arcxml
+asic
+asp.net
+asp.net 5/mvc 6
+asp.net core mvc
+asp.net mvc
+asp.net mvc 4
+asp.net mvc 5
+asp.net web api
+atl
+atlassian confluence
+attribute-based access control
+augmented reality
+aws cloudtrail
+aws cloudwatch
+aws codepipeline
+aws glue
+aws identity and access management
+aws iot core
+aws lake formation
+awt
+axis
+azure resource manager
+beats
+biometrics
+bitcoin
+blowfish
+bluetooth
+boost c++
+box2d
+bsd socket
+business intelligence markup language
+canvas
+cascading framework
+celery
+certification authority service
+cgi
+change control
+chatbot
+clariion
+clarion
+client-server architecture
+client-side object model
+cmd
+code ignitor
+codec
+codeigniter
+codepush
+collaborative data objects
+com
+com/dcom
+com+
+compass
+composer
+composite cms
+computer telephone integration
+contexts & dependency injection
+corba
+core data
+core image
+crisc
+dao
+data retention policy
+dbcc
+dce
+dcom
+dde
+delphi jedi
+des
+device drivers
+dhtml
+dibs
+dirxml
+django
+docbook
 docker
-kubernetes
-aws
+docker swarm
+document type definition
+dom - document object model
+dotnetnuke
+drm oma
+dvb-c
+dvb-h
+dvb-s
+dvb-t
+dxf
+ebxml
+ejb 3.0
+elasticsearch
+ember.js
+emc
+encryption
+endeavour
+enterprise data lake
+enterprise java beans
+entity relationship diagram
+episerver
+esd
+esri
+eureka
+experience api
+facebook api
+facelets
+field-programmable gate array
+fitnesse
+flask
+fop
+fpml
+fql
+freemarker
+functional safety
+gef
+geographic data files
+geographical information system
 git
+gnome
+google adwords
+google analytics
+google maps api
+google play services
+google protocol buffers
+google tag manager
+google web master tools
+google web toolkit
+grails
+graylog
+hacmp
+haml
+handlebars.js
+hateoas
+hibernate
+hpe 3par
+hpe storage
+http live streaming
+http smooth streaming
+hystrix
+ibatis dao
+ibatis sql maps
+ibis
+ibm bluemix
+ibm cognos
+ibm opc
+ibm spss
+ibm watson
+idea
+identityserver
+imagemagick
+informatica powercenter
+ip chains
+irda
+isapi
+j2ee jaas
+j2se 6.0 - mustang
+java annotation
+java applet
+java beans
+java card
+java database connectivity
+java management extensions
+java message service
+java native interface
+java persistence api
+java play framework
+java portlets
+java rmi
+java server pages
+java server pages standard tag library
+java servlets
+java stripes
+java swing
+java swing synth
+java web start
+javascriptmvc
+javaserver faces
+jaxb
+jaxp
+jax-rs
+jcaptcha
+jfc /java foundation classes
+jini
+jndi
+jns
+jprobe
+jprofiler
+jsom
+json
+json.net
+jsr 268
+jsr168
+jts
+jwt
+jxta
+kde
+keycloak
+kibana
+kohana
+lambda
+laravel
+liferay portal enterprise edition
+liferay portal standard edition
+linq
+linq to sql
+linq to xml
+liv.net
+livedata
+logstash
+lucene
+managed extensibility framework
+mapi
+mapinfo
+mapobjects
+mbms
+mcollective
+message sequence chart
+mfc
+microsoft adcentre
+microsoft azure active directory
+microsoft azure api management
+microsoft azure application insights
+microsoft azure data factory
+microsoft azure data lake
+microsoft azure databricks
+microsoft azure expressroute
+microsoft azure functions
+microsoft azure hdinsight
+microsoft azure iaas
+microsoft azure logic apps
+microsoft azure mfa
+microsoft azure paas
+microsoft azure saas
+microsoft azure security center
+microsoft azure service bus
+microsoft azure site recovery
+microsoft azure sql data warehouse
+microsoft azure storage
+microsoft azure virtual network
+microsoft azure web apps
+microsoft compact framework
+microsoft direct3d
+microsoft directdraw
+microsoft directinput
+microsoft directmusic
+microsoft directplay
+microsoft directsetup
+microsoft directshow
+microsoft directsound
+microsoft directx
+microsoft message queues
+microsoft solutions framework
+microsoft xna
+mitid
+model view viewmodel
+mqi
+muffins
+mva
+mvc
+mvc razor
+mvvmcross
+nemid
+nhibernate
+nightwatch.js
+nordic market model
+nsapi
+n-tier
+numerical control
+oauth
+oauth2
+object modeling framework
+objectarx
+ocx
+oid
+oio xml
+oioubl
+okhttp
+olap
+ole
+one-time password
+opc
+opc ua
+opc/esa
+open database connectivity
+openam
+opengl
+openid connect
+openjump
+openssl
+operational technology
+oracle adf
+oracle autonomous transaction processing
+oracle responsys
+osca
+osf-motif
+papyrus docexec
+pdo
+pgp - encryption
+pki
+portlets
+postgis
+powerha
+powervm
+ppfa
+profisee mdm
+progressive web apps
+prototype
+pull requests
+qgis
+quartz
+quickturn
+rbac
+rdf
+regedit
+remobjects anydac
+remobjects hydra
+rendezvous
+rest
+rest api
+rest assured
+restful design
+restful programming
+rfi/emi
+rhino.mocks
+rmi/iiop
+rss
+rxjava
+salesforce api
+sap bapi
+sap rfc
+sax
+scribe insight
+scriptaculous
+secure shell
+security baseline
+service fabric
+set
+sgml
+sharepoint object model
+siem
+simatic controllers
+single sign-on
+single-page application
+sitecore dms
+sitecore ecm
+sitecore foundry
+skade.net
+smartcard
+smil
+soap
+soar
+sphinx
+spring
+spring boot
+spring cloud
+spring cloud netflix
+spring core
+spring mvc
+spring security
+spring web services
+springfox
+sql server analysis services
+sql server business intelligence
+sql server data tools
+sql server integration services
+sql server management studio
+sql server reporting services
+sqlj
+ssr
+stax
+sterling integrator
+stl
+stored procedures
+struts
+svg
+swagger
+swing
+symfony
+symfony 2
+symfony 3
+symfony 4
+system management facilities
+systemc
+tag libraries
+tandem
+tapestry
+tapi
+telelogic rhapsody
+tibco::rv
+tiles plugin
+tmap
+tomahawk
+topicmap
+tp antenna
+travis ci
+triple des
+tsapi
+tso/racf
+tso-ispf
+twain
+twitter api
+typo3
+uart
+unity cloud build
+unix
+unreal engine
+vbx
+video encoding
+voicexml
+vrml
+vxfs
+waffle
+wap
+wcf
+web
+web crypto
+web part
+web scraping
+webforms
+webgis
+webgl
+webobjects
+websockets
+wicket
+wiki
+win16
+win32
+winapi
+windows bitlocker
+windows dna
+windows hello
+windows media
+windows mobile
+windows server appfabric
+windows workflow foundation
+winforms
+wininet
+winsocket
+wml
+wonderware application server
+wonderware intouch
+wpf
+wpki
+x windows
+xacml
+xalan
+xbrl
+xerces
+xforms
+xhtml
+xilinx embedded powerpc
+xilinx fpga
+xilinx microblaze soft-core
+xml
+xml parser
+xml schema
+xmpp
+xsd
+xvt
+yahoo search marketing
+youtube api
+zapp
+zend framework
+.net
+.net 3.0
+.net 3.5
+.net 4.0
+.net 4.5
+.net core
+386bsd
+a/ux
+abc80
+adobe marketing cloud
+advent portfolio exchange platform
+aia interactive digital platform
+aix
+akamai intelligent platform
+algorithmics
+alibaba cloud
+amazon web services
+amiga
+android
+apache kafka
+apache pig
+apigee api platform
+appian
+apple
+apple homekit
+app-v
+aprimo
+arch linux
+arduino
+arkit
+asp.net core
+automation anywhere
+axe-10
+axys - advent for asset manager
+beos
+blackberry os
+boomerang
+brew
+bs2000/osd
+bsd unix
+c64
+calypso
+calypso 14
+calypso 15
+calypso 16
+centum vp
+cics
+citrix
+cli
+cloudera cdh
+cloudera essentials
+cocos2d
+codewright
+com/com+
+confluent kafka
+coreos container linux
+cuda
+cyberark privileged access security
+cygwin
+db2 warehouse manager
+dde supermax
+debian
+dec
+dec alpha
+dec net
+dhtml/dom
+digital unix
+digital-compaq unix
+digitalocean
+dos
+dos/vse
+dow jones dna
+drdos
+ecos
+elastic stack
+embedded linux
+enterprise objects framework
+foundation
+freebsd
+f-secure
+gentoo linux
+google cardboard
+google chrome os
+google cloud platform
+google fuchsia
+guardian
+hp 3000
+hp 9000
+hp-unix
+htc vive
+ibm 3090
+ibm 3270
+ibm as/400
+ibm cloud
+ibm directory integrator
+ibm filenet p8 platform
+ibm i
+ibm information server
+ibm infosphere datastage
+ibm infosphere information server
+ibm iseries
+ibm s/36
+ibm s/38
+ibm tmf
+ibm z/os
+informatica
+instagram api
+intersystems ensemble
+ion
+ios
+ios 8
+ipad
+iphone os
+irix
+irix-sgi
+ivanti workspace control
+j2ee
+j2se
+jarkarta ee
+java ee
+java ee 6
+java ee 7
+java ee 8
+java me / j2me
+java se
+java se 10
+java se 11
+java se 12
+javafx
+kana
+keylane axon
+keylane plexus
+kony
+kronos
+less
 linux
-communication
-teamwork
-problem solving
+linux centos
+linux suse
+macintosh
+macos
+macos x server
+maemo
+mega hopex
+metatrader
+microsoft
+microsoft azure
+microsoft azure analysis services
+microsoft azure stack
+microsoft cluster server
+microsoft dos
+microsoft hololens
+microsoft mediaroom
+microsoft terminal server
+microsoft tv
+microsoft unit testing framework
+microsoft windows
+microsoft windows 10
+microsoft windows 8
+microsoft windows ce
+microsoft windows server
+microsoft windows server 2012
+microsoft windows server 2012 r2
+microsoft windows server 2016
+microsoft windows server 2019
+microsoft windows small business server 2003
+microstrategy
+mulesoft anypoint
+mvs
+neolane
+netbsd
+netsuite
+netware
+nextstep
+nintendo
+nist cybersecurity framework
+novell
+novell netware
+numerix
+numerix oneview
+oculus rift
+ogo
+openbsd
+openlink endur
+opennebula
+openstack
+openstep
+openvms
+ops-mvs
+oracle agile plm
+oracle erp cloud
+oracle hospitality suite8 property
+oracle linux
+oracle real application cluster
+oracle vm
+oracle webcenter
+os
+os/2
+os1100
+os-390
+os-400
+ose-delta
+outsystems
+palmos
+playstation
+poet
+portrait customer interaction suite
+progress openedge
+puremvc
+qnx
+red hat linux server
+red hat openshift
+resin app. server
+rightnow cx suite
+rolfe & nolan
+rs-6000
+rtos
+rtxcdsp
+ruby on rails
+s/390
+samsung gera vr
+sap cloud platform
+sap integration
+scala play
+sco openserver
+scvmm
+siemens rm400
+siemens tc65
+sinix
+sitecore
+slack
+sun os
+sun solaris os
+suse linux enterprise server
+suse linux openexchange server
+swiftnet
+symbian
+t2s
+ti 99/4a
+titaniuim mobile
+tomcat
+tru64
+tso
+ubuntu
+ultrix
+uml/mda
+unisys
+usg unix
+vaadin
+vax
+version 7
+vm/cms
+vms
+vms/esa
+vmware
+vxworks
+way4
+web.py
+webos
+windows embedded
+windows mixed reality
+windows phone
+wordpress
+xbox
+xen
+xenix
+xpages
+xwiki
+z/vm
+zoho creator
+4d
+active dbms
+adabas
+amazon aurora
+amazon relational database service
+apache cassandra
+apache couchdb
+apache hbase
+blockchain
+bmc addb
+bmc baca
+bmc bppm
+bmc discovery
+bmc performance manager
+borland interbase
+borland paradox
+btrieve
+ca-idms
+cds isis
+clarion - topspeed
+clipper
+cloudera impala
+cockroachdb
+corel paradox
+cqrs
+cte
+data transformation services
+database query language
+datacom
+dataflex
+db/400
+db2
+db2 universal database
+db2/2
+dbase
+dbase se
+distributed data management ddm
+distributed database
+dl/1
+documentdb
+dsi-system
+dynamic database management system
+enscribe
+entry sequenced data set
+erwin
+essbase
+event sourcing
+exodus
+faircom isam
+filemaker pro
+firebird
+flexdata
+foxbase+
+foxpro
+frontbase
+functional database
+google cloud firestore
+graph-oriented object database
+ibm information management system
+ibm informix
+ibm netezza
+ibm puredata system for analytics
+ibm unidata
+ibm universe
+idms
+idmsx
+ids/1
+ids2 network database
+image
+independent logical file
+influxdb
+integrated database management system
+intelligent database
+intersystems caché
+mapper
+mariadb
+memcached
+microsoft access
+microsoft azure cosmos db
+microsoft azure sql database
+microsoft azure table storage
+microsoft jet
+microsoft sql server
+microsoft sql server 2014
+microsoft sql server 2016
+microsoft sql server 2017
+microsoft visual foxpro
+mimer
+mindscape lightspeed
+mnesia
+mongodb
+msql
+multics relational data store
+mysql
+mysql workbench
+national database language
+navision database
+neo4j
+network database
+nosql
+object-oriented database
+ole db
+onetick
+on-line analytical processing
+operational database
+oracle
+oracle 10g
+oracle 11g
+oracle 12c
+oracle 13c
+oracle 18c
+oracle 19c
+oracle berkeley db
+oracle berkeley db java edition
+oracle berkeley db xml
+oracle golden gate veridata
+oracle rdb
+oracle xe
+persistent object store
+pervasive.sql
+postgres
+postgresql
+query by example
+query patroller
+quest foglight
+quicksilver
+ravendb
+red brick intelligent sql
+redis
+riak
+sap db
+shareplex
+sql azure
+sqlbase
+sqlite
+ssas tabular
+static database management system
+sybase adaptive server enterprise
+sybase adaptive server iq multiplex
+sybase mobilink
+sybase sql anywhere studio
+sybase sql server
+sybase ultralite
+system r
+tamino
+teradata
+uds/sql
+unify
+versant
+very large database
+virtual storage access method
+vsam
+watcom sql
+wonderware insql
+xbase
+zodb
+4th dimension
+acu-bench
+ads/online
+advanced query tool
+advantage:gen
+adw
+aircom asset
+akka actors
+akka toolkit
+aldec activehdl
+allegro
+allfusion gen
+altera quartus-ii
+altova mapforce
+amazon redshift
+anaconda
+android sdk
+android studio
+andromda
+angular
+angular 2
+angular 4
+angular 5
+angular 6
+angular 7
+angular 8
+angular cli
+angular elements
+angulardart
+angularjs
+antlr
+apache ambari
+apache ant
+apache batik
+apache cordova
+apache crunch
+apache flume
+apache hive
+apache nifi
+apache sqoop
+appbuilder
+appcelerator titanium
+appium
+apple pay
+apple webobjects 5
+appman
+aps - application productivity system
+arcore
+argouml
+arm template
+as/set
+asp.net signalr
+assembler mc6809
+atlassian bitbucket
+attunity
+author-it
+autofac
+autoprefixer
+autotest
+aws batch
+aws cloudformation
+aws database migration service
+aws lambda
+axure rp
+baan tools
+backbone.js
+balsamiq mockups
+bea visual café
+behat
+bem
+blazor
+board station
+bootstrap
+borland c++
+borland jbuilder
+borland turbo c
+borland turbo pascal
+borland turbo prolog
+bower
+breeze.js
+brew sdk
+brew tools
+bts
+bugtracker
+bugzilla
+c/side
+c++ builder
+ca gen
+ca librarian
+ca test data manager
+cacti
+cactus
+cadence
+calypso automated testing tool
+canoo webtest
+case 2000
+casestudio
+castle windsor ioc
+cat tool
+cat@log
+catalyst
+ca-telon
+ccc harvest
+centura sql windows
+ceph
+chai
+chart.js
+cics websupport
+cl
+clear case
+clear quest
+cm synergy
+cmake
+cocoa interface builder
+cocoapods
+code composer studio
+code warrior
+codegear delphi
+codegear rad
+codesniffer
+communicating sequential processes csp
+composite application library
+compuware qacenter
+compuware qadirector
+compuware qarun
+compuware reconcile
+compuware trackrecord
+consurrent versions system
+continuus
+cool:2e
+cool:biz
+cool:gen
+cool:plex
+coredata
+coreimage
+cpanel
+create.js
+cruisecontrol
+cruisecontrol.net
+cryengine
+crystal reports
+css grids
+cucumber
+cypress
+d3.js
+datamanager - visual soft
+datamapper
+db2adm
+dbix::class
+dbunit
+delphi.net
+design architect
+design compiler
+design/1
+designer-2000
+developer-2000
+devexpress .net components
+devexpress components
+devexpress delphi components
+devexpress xaf
+devexpress xpo
+devtrack
+dezign for databases
+dfsort
+dirsync
+dita open toolkit
+doctrine
+dojo
+dottrace
+dox10
+doxygen
+dps
+dragonfly
+durandaljs
+dynamic html
+dynamicweb cms
+dynatrace ajax
+easycase
+easymock
+ecatt
+eclipse
+eclipse plugins
+eclipse rcp
+edit
+edlund.net
+eee
+emacs
+embarcadero c++ builder
+embarcadero delphi
+embarcadero rad studio
+emerson deltav
+emf
+endevor
+enfinity
+entity framework
+entity framework core
+er/studio
+e-sim
+evc++ 4.0
+expect
+express.js
+ext js
+fabric
+fiddler
+fido
+fileaid
+fileaid db2
+filemaker developer
+firebase
+firebug
+flexera admin studio
+flutter
+fme
+focal point
+forehelp
+formgn
+forte
+forte c
+forte c++
+forte for java
+fpga express
+fragments
+freescale mcu
+fxcop
+gcc
+gdb
+gemini
+genesys
+gerrit
+gevent
+gitlab
+gnats
+gns3
+gnu bison
+gnu c
+gojs
+google app engine
+google cast sdk
+gopherjs
+gradle
+graphite
+greendao
+gruntjs
+guardien
+gui designer
+gulp.js
+hashicorp consul
+hashicorp packer
+hashicorp terraform
+hazelcast imdg
+help & manual
+heroku
+hibernate ogm
+hibernate orm
+hibernate orm 3
+hibernate orm 4
+hibernate orm 5
+hibernate search
+hibernate search 4
+hibernate search 5
+highcharts.js
+hp alm
+hp performance center
+hp quality center
+hp quicktest
+hp service test
+hp sitescope
+hp test suite
+hp testdirector
+hyper card
+hyperion dashboard development services
+ibm debug tool
+ibm fault analyzer
+ibm hps
+ibm rational application developer
+ibm rational developer for system z
+ibm rational functional tester
+ibm rational quality manager
+ibm rational software architect
+ibm rational team concert
+ibm sb+
+ibm sterling connect:direct
+icefaces
+impromptu
+infinispan
+infomaker
+infoman
+informix metacube
+infragistics
+infragritics ultrawingrid
+install/1
+installshield
+insted
+intel integrated performance primitives
+intellij
+intertest
+iona
+ionic
+ios sdk
+ipf
+iron speed designer
+jasmine
+java development kit
+java ide
+jax-ws
+jbpm
+jcaps
+jdepend
+jdeveloper 11g
+jedit
+jekyll
+jenkins
+jenkins job dsl plugin
+jenkins pipeline
+jes2
+jes3
+jest
+jface
+jfreechart
+jgroups
+jmeter
+jmock
+jpa
+jqtouch
+jquery
+jquery mobile
+jquery ui
+jspdf
+jsunit
+junit
+justinmind
+jvision
+k2 for sharepoint
+karma
+katalon studio
+keystone.js
+kiokudb
+knockoutjs
+koa.js
+kofax kapow
+kubernetes
+labview
+labwindows/cvi
+laravel homestead
+lauterbach emulator
+leaflet
+lenovo thin installer
+leonardo spectrum
+lex
+libririan
+linc
+liquibase
+llbl gen pro
+loadrunner
+lodash.js
+log4j
+log4net
+lsmw
+madcap flare
+magicaldraw
+make
+mantis
+masonry
+mathcad
+maven
+mentor graphics pads
+mercurial
+mercury load runner
+metal api
+meteor.js
+mfs
+micro focus cobol
+microsoft app-v sequencer
+microsoft azure devops
+microsoft deployment toolkit
+microsoft embedded visual tools 3.0
+microsoft enterprise library
+microsoft expression blend
+microsoft frontpage
+microsoft office infopath
+microsoft orca
+microsoft powerapps
+microsoft sharepoint designer
+microsoft silverlight
+microsoft sms installer
+microsoft sql enterprise manager
+microsoft test manager
+microsoft unity framework
+microsoft visual c
+microsoft visual c++
+microsoft visual interdev
+microsoft visual j++
+microsoft visual modeler
+microsoft visual sourcesafe
+microsoft visual studio
+microsoft visual studio 2015
+microsoft visual studio 2017
+microsoft visual studio 2019
+microsoft visual studio code
+microsoft visual studio lab management
+microsoft visual studio team system
+microsoft visual studio test professional
+microsoft web application stress tool
+microsoft windows installer
+microsoft windows installer xml toolset
+microstation
+middlegen
+mks source integrity
+mmr
+mobile webkit
+mocha
+mockito
+modelsim
+mojolicious
+moment.js
+mono
+moose
+mootools
+moq
+morphx
+mosaico
+motorola emulator til 68705
+ms composite application guidance
+msbuild
+mse magic e-developer
+msi packaging tools
+mstest
+mysql-front
+nant
+national instruments labview
+ncover
+ndepend
+nebula
+nest.js
+netbeans
+netegrity siteminder
+newrelic
+next.js
+nexus
+ngrx
+ni multisim
+ninject
+nlog
+nmock
+node.js
+node-red
+npm
+nuget
+numpy
+nunit
+nx
+object cycle
+object domain
+objekt pascal
+oliver
+oma
+omniscient.js
+oocss
+opencv library
+openlayers
+openscenegraph
+opus
+oracle adf business components
+oracle adf faces
+oracle advanced queue
+oracle advanced replication
+oracle application express
+oracle applications
+oracle bi applications
+oracle bi enterprise edition
+oracle bi publisher
+oracle co-operative applications
+oracle data guard
+oracle designer
+oracle developer
+oracle discoverer
+oracle enterprise manager - dba studio
+oracle financial analyzer
+oracle financials
+oracle forms
+oracle grid control
+oracle interconnect
+oracle olap 10g
+oracle parallel server
+oracle pro*c
+oracle pro*cobol
+oracle recovery manager
+oracle reports
+oracle reportwriter
+oracle rpt/rpf
+oracle sales analyzer
+oracle server manager
+oracle soa suite
+oracle sql developer data modeler
+oracle sql loader
+oracle sql menu
+oracle sqldba
+oracle streams
+oracle warehouse builder
+oracle workflow
+oracle*case
+orcad capture
+orcad layout
+pandas
+papyrus designer
+pathmaker
+pattern lab
+pbdoc
+perforce
+perl orm
+phantomjs
+phonegap
+php mess detector
+phpstorm
+phpunit
+physical compiler
+pillow
+pl/sql developer
+plack
+platinum
+pmw
+pngopt
+polarion alm
+polymer js
+poseidon for uml
+postcss
+postman
+powerbuilder
+powerdesigner
+powergen
+preact
+predict
+predict case
+prettier
+prince
+protractor
+pspice
+pubnub
+push to test
+putty
+pvcs
+pycharm
+pygame
+pygtk
+pyqt
+pyspark
+pytorch
+qacenter
+qacomplete
+qadirector
+qarun
+qmf
+qt
+qt creator
+qtopia
+qualcomm qpst
+quest coexistence manager
+quest migration manager for active director
+quest notes migrator for exchange
+quest notes migrator for sharepoint
+quest sql-navigator
+quest toad
+quick test pro
+qunit
+ractive.js
+rancher
+ranorex
+rapise
+rational ada
+rational application developer
+rational clearcase
+rational clearddts
+rational clearquest
+rational purecoverage
+rational robot
+rational rose
+rational software modeler
+rational teamtest
+rational test suite
+rational unified process
+rational visual purify
+rational visual quantify
+rational visual test
+rdlc
+react native
+reactivecocoa
+reactivex
+reactjs
+readyapi
+reconcile
+redux
+report builder
+reqtest
+require.js
+resharper
+restkit
+retrofit
+revolve
+riot.js
+ris/pacs
+rivets.js
+rm-panels
+robohelp
+robohtml
+ronin
+rspec
+rstudio
+rxcocoa
+rxjs
+rxswift
+saaj
+sails.js
+sap abap workbench
+sap badi
+sap crystal reports
+sap edi tools
+sap smart forms
+sap user exits
+sap.net connector
+sas dde
+sas etl studio
+sas macro
+sas macro command
+sas macro command di
+sas macro command etl
+sas macro di
+sas macro etl
+sas wrs
+sattline
+scala build tool
+scikit-learn
+scipy
+sclm
+scm
+scratchbox
+sdesignor
+sdf
+sdf / sdf ii
+sdo
+sdsf/sdsf2
+seapine - testtrack
+seapine qa wizard
+seapine test track pro
+see
+select se
+selenium
+selenium ide
+selenium webdriver
+semantic ui
+sencha touch
+sensu
+serena changeman zmf
+serilog
+shiny
+shinyjs
+siemens step 7
+silex
+silkperformer
+silktest
+simatic hmi
+simula
+smartinspect
+smarttest
+smp
+snasm
+soapscope
+soapui
+softomotive processrobot
+sonarqube
+source code control system
+sparx system enterprise architect
+spatial etl
+spiratest
+splunk
+spock
+spod
+spufi
+sql navigator
+ssadm-sf
+state management
+stk components
+structuremap
+stsadm
+sun workshop pro
+superbase
+svn
+swig
+swt
+symantec c++
+symantec café
+syncort dbos
+tail
+talend big data
+talend open studio
+team developer
+teamcity
+techsmith snagit
+telerik
+tensorflow
+test script
+testcomplete
+testdirector
+testlink
+testpartner
+teststand
+testtrack
+textmate
+the internet adapter
+three.js
+tia portal
+tia portal v14
+timeextender
+tkinter
+tkprof
+together control center
+tortoisesvn
+trackrecord
+tricentis tosca
+tso/ispf
+twig
+typemock isolator
+uft
+uiq
+ultraedit
+ultramake
+underscore.js
+unicom system architect
+unigui web application framework
+unity
+unity 2017
+unity3d
+uss
+uxpin
+vanillajs
+velocity
+verify
+vermont hightest plus
+vi
+vispro c++
+visual age
+visual age c++
+visual age for java
+visual age generator
+visual builder
+visual paradigm
+visual slickedit devolopment environment for unix
+volley
+vsts test edition
+vue.js
+vuforia
+watcom c++
+watir
+web inspector
+web processing service
+webflow
+weblogic workshop
+webmethods
+webpack
+websphere business integration message broker
+websphere business modeler
+websphere development studio
+websphere integration developer
+websphere studio
+websphere studio application developer
+webvr
+weinre
+wherescape 3d
+wherescape® automation
+wherescape® data vault express
+wherescape® red
+whm
+wijmo control library
+winautomation
+wincc
+windows driver device kit
+windows driver kit
+windows registry
+windows template library
+wireshark
+wise for windows installer
+wise installmaster
+wise package studio
+wxpython
+xamarin
+xamarin.android
+xamarin.forms
+xamarin.ios
+xamarin.mac
+xapian
+xcode
+xdoclet
+xhgui
+xhprof
+xilinx edk
+xilinx ise
+xml spy
+xml thunder
+xmlunit
+xpediter
+xpediter cics
+xpediter tso
+xpf
+xray for jira
+yacc
+yui library
+zephyr
+5nine cloud security
+5nine manager
+acm
+advfs
+alteryx
+altiris deployment suite
+ansible
+aos/vs
+apache 2
+apache tomcat
+apache web server
+apple push notification system
+application infrastructure
+application virtualization
+appsense
+appworx
+aqualogic
+aqualogic data services platform
+aqualogic service bus
+as2 adapter
+as3 adapter
+atlassian bamboo
+atlassian fisheye
+atlassian sourcetree
+autonomy idol server
+axiomatics services manager
+backoffice
+bdd 2007
+berkeley internet name domain
+bigbrother
+biztalk360
+blackberry enterprise server
+blackberry internet service
+blackberry mobile voice system
+blueprism
+bmc control-m
+ca workload automation
+ca-detector
+caucho resin
+cisco packet tracer
+cisco wan manager
+citrix cloudgateway
+citrix edgesite
+citrix hypervisor
+citrix metaframe
+citrix netscaler
+citrix presentation server
+citrix secure hub
+citrix vdi-in-a-box
+citrix virtual apps & desktop
+citrix xenapp
+citrix xendesktop
+codesoft
+cold fusion
+commvault simpana
+content delivery network
+courier-imap
+crossworlds
+cruisecontrol.net server
+cyberark application identity manager
+cyberark enterprise password vault
+cyberark privileged session manager
+db2 performance monitor
+demandware commerce
+desktop virtualization
+desqview
+dfsmsrmm
+directory service
+divine
+driveimage
+drupal
+drupal 5
+drupal 6
+drupal 7
+drupal 8
+eai
+easerver
+easyrecovery
+e-directory
+eflow
+emet
+enhydra application server
+enterprise content management
+enterprise service bus
+entire/x
+entrust authority pki
+entrust getaccess
+epm
+ess
+fatwire
+fedora
+filemaker mobile
+filemaker server
+filemaker server advanced
+forefront unified access gateway
+front arena
+frontec amtrix
+geb
+ghost
+gigaspaces
+github
+gnu
+google search appliance
+haproxy
+harbor/nsm
+hitex ocd tools
+hornetq
+hp business service management
+hp service manager
+hp systems insight manager
+hyperion shared services
+ibm dfsms
+ibm dfsmshsm
+ibm director
+ibm i acs
+ibm infosphere cdc
+ibm mq
+ibm netview ftp
+ibm omegamon
+ibm pcomm
+ibm psf
+ibm rational business developer
+ibm riscwatch processor probe
+ibm security access manager
+ibm security access manager esso
+ibm system i5 express
+ibm tam
+ibm tbsm
+ibm tcim
+ibm tdi
+ibm tdm
+ibm tec
+ibm tip
+ibm tivoli data warehouse
+ibm tivoli monitoring
+ibm tivoli netcool/impact
+ibm tivoli netcool/omnibus
+ibm tivoli netcool/webtop
+ibm tivoli netview
+ibm tivoli software distribution
+ibm tivoli user administration
+ibm tn3270
+ibm tpm
+ibm trc
+ibm tws
+ibm vtam
+idapss
+imagecast
+inprise application server
+iplanet web server
+jamf pro
+java virtual machine
+jboss
+jboss business rules management system
+jboss enterprise application platform
+jboss enterprise data services platform
+jboss enterprise soa platform
+jboss esb
+jboss fuse
+jboss marshalling
+jboss messaging
+jboss operations network
+jboss portal
+jetty
+jfrog artifactory
+jira service desk
+kvm
+lauterbach icd
+lvm
+mainframe express
+mc/serviceguard
+mcafee groupshield
+mediusflow
+merant pvcs version manager
+merva/esa
+microsoft application center 2000
+microsoft azure event hub
+microsoft biztalk esb toolkit
+microsoft biztalk server
+microsoft biztalk server 2010
+microsoft biztalk server 2013
+microsoft biztalk server 2013 r2
+microsoft biztalk server 2016
+microsoft biztalk server adapters
+microsoft cloud app security
+microsoft cms
+microsoft commerce server
+microsoft content management server
+microsoft e-commerce server
+microsoft exchange online
+microsoft exchange server
+microsoft exchange server 2010
+microsoft exchange server 2013
+microsoft exchange server 2016
+microsoft failover cluster manager
+microsoft forefront tmg
+microsoft host integration server 2000
+microsoft hyper-v
+microsoft identity integration server
+microsoft internet information services
+microsoft isa server
+microsoft live communication server
+microsoft lync
+microsoft message queuing
+microsoft office communications server
+microsoft office sharepoint foundation 2010
+microsoft office sharepoint server
+microsoft operations management suite
+microsoft operations manager 2005
+microsoft operations manager 2007
+microsoft proxy server
+microsoft security compliance manager
+microsoft sharepoint
+microsoft sharepoint online
+microsoft sharepoint portal server
+microsoft sharepoint server
+microsoft site server
+microsoft small business server
+microsoft sna server
+microsoft system center
+microsoft system center data protection mgr
+microsoft terminal services manager
+microsoft transaction server
+microsoft virtual desktop infrastructure
+microsoft virtual server 2005
+microsoft web services enhancements
+mks
+mqs
+mqseries
+mrtg
+mule esb
+nagios
+netiq application manager 5.0
+netscape server
+neuron-esb
+nginx
+non stop
+novel zenworks configuration manager
+octopus deploy
+office business applications
+opencms
+opentext archive server
+opentext content server
+openwebcms
+oracle application server
+oracle business process management
+oracle data integrator
+oracle golden gate
+oracle portal
+oracle service bus
+oracle webdb
+oracle xmldb
+orbix
+orion application server
+orsyp $universe
+osgi
+partitionmagic
+pathworks
+pc/104
+postfix
+powermart
+premisql
+prometheus
+proswitch
+proxmox
+puppet
+qemu
+qmail
+rabbitmq
+readsoft invoice processing
+red hat satellite
+red hat satellite 5
+red hat satellite 6
+remobjects dataabstract
+remobjects sdk
+retek
+role tailored client
+rrdtool
+samba
+sccm
+sccm 2007
+sccm 2012
+sccm 2016
+scom
+scom 2007
+scom 2012
+scom 2016
+screwdrivers
+scsm
+sdd
+sdsf
+seebeyon
+sendmail
+server virtualization
+silverstream
+skype for business server 2015
+slf4j
+sql clustering
+squid
+stonebranch universal agent
+stonebranch universal automation center
+stonebranch universal controller
+stonebranch universal data mover
+strobe
+sun glassfish enterprise server
+symantec deployment solution
+symantec netbackup
+synkron.web
+talend integration cloud
+tasking's c166
+tektronix k15 protocoll analyser
+tfs
+tibco adapter sdk
+tibco businessworks
+tibco clustering
+tibco cobol adapters for s/390
+tibco designer
+tibco ejb adapters
+tibco enterprise administration
+tibco enterprise application integration
+tibco enterprise message service
+tibco fault tolerance
+tibco file adapters
+tibco rendezvous
+tibco rendezvous routing daemon
+tng unicenter
+tpx
+tsm/nsm
+tuxedo
+uc4
+uc4 workload manager
+uwsgi
+vagrant
+veeam backup & replication
+veritas cluster server
+veritas netbackup enterprise server
+vertias
+virtualbox
+visualcron
+vmware airwatch
+vmware app volumes
+vmware esx
+vmware esxi
+vmware horizon cloud
+vmware infrastructure
+vmware thinapp
+vmware vcenter chargeback manager
+vmware vcenter configuration manager
+vmware vcenter infrastructure navigator
+vmware vcenter lab manager
+vmware vcenter operations management suite
+vmware vcenter operations manager
+vmware vcenter site recovery manager
+vmware vcloud automation center
+vmware vcloud connector
+vmware vcloud director
+vmware vcloud networking & security
+vmware vcloud suite
+vmware vfabric application director
+vmware vfabric hyperic
+vmware vsphere
+vmware vsphere storage appliance
+vxvm
+wbi message broker
+wbi-fn
+wcf ria services
+wcm
+web content management system
+web server gateway interface
+webboard
+weblogic integration
+weblogic portal server
+weblogic server
+webseal
+websphere application server
+websphere commerce
+websphere datapower
+websphere enterprise service bus
+websphere mq workflow
+websphere portal express
+websphere portal server
+websphere process server
+wildfly
+windows remote desktop services
+windows server update services
+windows services
+windows sharepoint services
+windows virtual pc
+winrunner
+wmi
+xfire
+xinfo
+xmail
+yammer
+yaws web server
+zope
+a/b testing
+acceptance testing
+actuarial mathematics
+actuarial statistics
+acunetix
+advanced mathematics
+advanced risc machines
+advanced statistics
+agile release train
+agile testing
+algorithm design
+application packaging
+archimate
+architecture evaluation
+artifact management
+asap
+as-is process flow
+atomic design principle
+bachman
+basel ii
+basel iii
+bcms
+bdd
+best practice
+black box testing
+booch
+bottom-up testing
+browserstack
+burn-down chart
+burn-up chart
+business continuity management
+business continuity planning
+certified continuity manager
+certified information security manager
+certified information systems auditor
+cip
+cissp
+cloud native
+component test
+concurrent computing
+configuration test
+containerization
+continuous delivery
+continuous delivery pipeline
+continuous deployment
+continuous integration
+counterparty risk
+crd iv
+csdr
+daily scrum
+data as a service
+data design patterns
+data integration patterns
+debugging
+deep learning
+definition of done
+dependency injection
+design control
+design driven development
+design patterns
+design rationale
+digital factory
+disciplined agile delivery
+distributed computing
+distributed tracing
+domain-driven design
+dual-track agile
+dynamic application security testing
+dynamic testing
+emergence
+emir
+empiricism
+epp
+espd
+exploratory testing
+extreme programming
+fatca
+fda 21 cfr part 11
+fda regulations
+financial information exchange
+fmea
+forecast
+functional javascript
+functional testing
+fund accounting
+funnel optimization
+furps+
+gamp
+gamp 4
+gamp 5
+gap analysis
+gatling
+gdpr
+ghost inspector
+good manufacturing practice
+google sprint
+google test
+graceful degradtion
+gray box testing
+gxp
+hierarchical state machines
+hipaa regulations
+hp unified functional testing
+iac
+ibm optim test data management
+ieee 802
+ifrs
+increment
+infrastructure as a service
+integration testing
+inversion of control
+ip multicast
+isae 3402
+iso 15022 - securities
+iso 17799 - data security
+iso 19770 - it asset management
+iso 20000 - service management
+iso 20022 - financial services
+iso 22301 - business continuity management
+iso 27000 - information security management
+iso 27001 - information security management
+iso 27002 - information security management
+iso 27015 - information security management
+iso 29119 - software testing
+iso 31000 - risk management
+iso 31010 - risk management
+iso 9000 - quality management systems
+iso 9001 - quality management systems
+jacobson
+james martin
+kanban
+key performance indicator
+large-scale scrum
+lean - 5s
+lean - hoshin kanri
+lean - kaisen
+lean - kanban
+lean - leveling heijunka
+lean - manufacturing
+lean - one-piece flow
+lean - overall equipment efficiency
+lean - plan do check act
+lean - product family
+lean - single minute exchange of dies
+lean - standard work
+lean - total productive maintenance
+lean - user experience
+lean - value stream mapping
+lean - waste muda
+level design
+liquid computing
+load testing
+log management
+mapreduce
+mapreduce design patterns
+mar
+mathematical methods
+mdsd
+microsoft azure backup
+microsoft dynamics sure step
+microsoft visual studio codedui
+mifid
+mifir
+mooc
+ms foundation
+multicast
+multi-factor authentication
+multithreading
+mvp
+neural networks
+new product development
+non-functional testing
+odata
+official information online
+oocase
+opnfv security vulnerability management
+orm
+owasp
+parallel computing
+passive testing
+patching
+pci compliance
+pci dss
+pci scc
+penetration test
+pep
+perform
+performance testing
+personal data protection act
+php standard recommendation
+pkcs1
+pkcs11
+platform as a service
+prince2 agile
+probability
+product backlog
+product backlog refinement
+proof of concept
+props
+psd2
+pupate
+ralph kimball methodology
+rapid application development
+rapid software testing
+ready
+red team excercise
+regression test
+regular expressions
+risk-based testing
+rup
+sabsa
+sap abap oo
+scalability testing
+scrum board
+scrum team
+scrumworks basic
+scrumworks pro
+secure coding
+security audits
+security by design
+security coding
+security testing
+server hardening
+session-based testing
+sftr
+single euro payments area
+smoke testing
+snowflake
+software as a service
+software craftsmanship
+solid
+solution train
+solvency ii
+specflow
+sprint
+sprint backlog
+sprint goal
+sprint planning
+sprint retrospective
+sprint review
+star schema modeling
+static application security testing
+static testing
+statistical methods
+stress testing
+structured programmering
+structured test
+taa/baa
+technical analysis
+technical debt
+test basis
+test process improvement
+test-driven development
+threat mitigation
+tiber-eu
+to-be process flow
+togaf
+top-down testing
+troubleshooting
+unified communications
+unified messaging
+unit test
+use cases
+user acceptance testing
+user story
+value chain finance
+vci model
+wcag
+white box testing
+w-model
+xaas
+xml security
+yourdon
+zachman
+2g network
+3g network
+3gpp
+3gpp standardization
+4g network
+5g network
+5g nr
+analog digital converter
+ascom rectifier
+autosis
+base station subsystem
+battery
+billing mediation platform
+bsc
+bss
+bss/oss
+business support & control system
+cable technique
+call detail record
+ccn
+ceragon digital microwave link
+clearing house
+common channel signaling system no. 7
+connected tv
+converged communication
+cpe
+cross-connect
+cs
+cwdm
+digital microwave link
+digital multiplexor
+digital node
+digital switch
+direct debit
+dwdm
+edge
+ericsson
+etsi
+femtoceoll
+fixed broadband
+fixed network
+fixed wireless access
+fokus
+g.shdsl
+general packet radio service
+ggsn
+gps
+gsm
+halon-/inergen system
+hdsl
+hsdpa
+hspa
+huawei provisioning
+imt-2000
+initiator
+inmarsat
+intelligent network
+interactive voice response
+interconnect traffic
+interface and migration
+ip
+ip multimedia subsystem
+ip-dslam
+ip-network
+ip-ran
+ip-telephony
+ip-tv
+itu
+lte
+lte physical layer
+md110
+mediation
+mgw
+minilink
+mm1
+mm7
+mms
+mobile broadband
+mobile switching center
+msms
+mss
+multiscreen
+mvno
+nbap
+netact
+nethawk
+network planning
+network subsystem
+nmt
+np
+number portability
+ops
+optical transmission
+ota
+ott
+pdh
+postpaid
+power supply
+prepaid
+provisioning
+ps
+radio chain
+radio planning
+ran
+ran1
+ran2
+ran4
+ranap
+ranos
+rdk
+rnc
+rnsap
+roaming
+roaming/tap3
+rtsp
+sdh
+sea cable
+second screen
+set top box
+sgsn
+short message service center
+sigtran
+sip
+smarttv
+surveillance center
+synchronous digital hierarchy
+tetra
+tmn
+traffica
+universal mobile telecommunications system
+unlicensed mobile access
+ups
+urllc
+usim/sim
+utran interfaces
+v5.x
+vdsl
+vod
+voip
+wbxml
+wcdma
+wi-fi
+wimax
+wireless transmission
+zigbee
+3com hubs
+3com routers
+3com switches
+ace
+acknowledgement
+acms
+adsl
+adsm
+afp
+afs
+alwayson
+analog modem communication
+antivirus software
+apache sentry
+appc
+appn
+arcserve
+arp
+aruba
+asantech universal video platform
+asteriks
+atm
+backup software
+bacnet
+bay hub
+bay switches
+bgp-4
+bitdefender
+bluecoat proxy av
+bluecoat proxy sg
+bluetooth health device profile
+bluetooth low energy
+bluetooth serial port profile
+bluetooth service discovery protocol
+bootp
+brocade network solutions
+brs
+ca unicenter
+can
+capi
+carrier ethernet
+ccar
+ccda
+ccde
+ccdp
+ccent
+ccie
+ccna
+ccnp
+cct
+check point firewall
+chef
+cisco
+cisco aci
+cisco anyconnect
+cisco asa
+cisco call manager
+cisco firepower
+cisco hub
+cisco ios
+cisco ios xr
+cisco ipcc
+cisco ironport
+cisco ise
+cisco nac
+cisco nexus switches
+cisco nx-os
+cisco pix firewall
+cisco router
+cisco switches
+cisco-vpn router
+clearswift secure email gateway
+cmts
+comptel policy management
+content-addressable storage
+continuus versioning system
+cpic
+cslip
+data hub
+dect
+dell force10
+dhcp
+digital certificates
+digital modem communication
+directaccess
+dlp
+dmz
+dns
+docsis
+dynamips
+edifact
+edifact mapping
+emc symmetrix
+eosdh
+ethernet
+f5 networks
+fddi
+fiber optic network
+fip
+fireeye
+fixed line connections
+fmc
+fortigate
+framerelay
+ftp
+gba
+gigabit
+gpib
+h.248
+hardware security modules
+hdlc
+host intrusion detection
+hp loadrunner
+hp openview
+hp procurve
+hpc
+hsm/rmm
+hsrp
+http
+ibm hub
+ibm qradar siem
+ibm router
+ibm switch
+ibm tcm
+ibm tscm
+ids
+iec 60870
+iec 61400-25
+iec 61850
+ikev2
+inet
+infrastructure data center
+intermediate document
+internet group management protocol
+interview
+ip fabric
+ip/ipsec
+ippc
+iptables
+ipv6
+ip-vpn
+ipx/spx
+isdn
+is-is
+itch protocol
+juniper
+junos
+kerberos
+kermit
+lag
+lcd
+ldap
+libcurl
+linux clustering
+load balancing
+lu6.2
+madge isdn switch
+maximum transmission unit
+mcafee antivirus
+metasploit
+microsoft azure iot hub
+microsoft forefront endpoint protection
+microsoft system management server
+milestone xprotect enterprise
+milestone xprotect video management software
+mnp
+mpls
+mqha
+nagle's algorithm
+nessus
+netbeui
+netbios
+netbios/netbeui
+netcool
+netfilter/ipfilter
+netscreen firewall
+network firewall
+network intrusion detection
+network inventory management system
+network topology
+nfs
+nmap
+nntp
+novell border manager
+novell zen works
+ntp
+odi
+openflow
+openview
+openview temip
+oracle sql*net
+osi
+ospf
+ouch protocol
+palo alto
+poe
+pop3
+pop-imap
+ppp
+profibus
+prtg
+quality of service
+rac
+racf
+radio frequency
+radio frequency identification
+radius authentication
+remote method invocation
+remote terminal unit
+retransmission
+rip
+rpc
+rs-232 communication
+rtp
+rtp packet
+rtt
+san
+scanet
+sdlc
+sdp
+secure sockets layer
+serial communication
+skype
+slip
+smpp
+smtp
+sna
+sna communication
+sna-sni
+snmp
+solaris cluster
+solarwinds ipam
+solarwinds lem
+solarwinds ncm
+solarwinds npm
+solarwinds nta
+solarwinds sam
+solarwinds virtualization manager
+solarwinds vnqm
+solarwinds wpm
+sonet
+sophos
+souptcp
+spdy
+spf
+srs
+ssl vpn
+storage area networks
+sun storedge
+swiftnet browse
+swiftnet fileact
+swiftnet interact
+switch technology
+symantec brightmail
+symantec data loss prevention
+symantec endpoint protection
+symantec esm
+symantec intrusion detection and prevention
+sytos
+tcp delayed acknowledgment
+tcp offload engine
+tcp retransmission timeouts
+tcp selective acknowledgment
+tcp/ip
+telnet
+temip
+time-division multiplexing
+tlms
+tokenring
+transmission control protocol
+trend micro internet security
+trend micro mobile security
+trip
+u-commerce
+udp
+umts
+unicast
+usb
+usb technologies
+uucp
+varnish
+virtual private network
+vlan
+volte
+vxlan
+wan switching
+wap gateways
+wap push
+watchguard
+web application firewall
+whatsup gold
+windows firewall
+wins
+wireless security
+wlan
+x.21
+x.25
+x.400
+x.509 digital certificate
+x.75
+xdsl
+xmodem
+zabbix
+zenworks
+z-wave
++pres enhance
+1c: accounting
+1c: enterprise
+1c: payroll & hr
+1c: trade & warehouse
+acadre
+alfresco
+algo audit and compliance
+algo collateral
+algo collateral decision support
+algo credit limits
+algo credit regulatory capital
+algo operational risk advisory
+alnova
+altiris asset and cmdb
+altiris client & mobile
+altiris security & compliance
+altiris server & infrastructure
+altiris service desk
+altiris wise package studio
+amazon elastic compute cloud
+amdocs - csm
+amdocs - maf
+amdocs - mps
+amdocs - pp
+amdocs clarifycrm 12
+amdocs enabler
+amdocs ensemble
+amipro wordpro
+appdynamics
+apple safari
+aris
+aris for sap netweaver
+arke
+aspect4
+atlassian jira
+atlassian stash
+autosar
+azure information protection
+baan
+bae systems
+bankstandards
+banqsoft view21
+base24
+basware
+billing system from ams
+bizagi business process modelling & notation
+bizagi engine
+bizagi studio
+bizwizard
+bloomberg b-pipe
+bloomberg terminal
+bluefax
+bluenote
+bms-r
+bosh inubit bpm
+business information warehouse
+business intelligence development studio
+business objects cubes
+business objects universe designer
+business process modeling notation
+c2
+ca acf2
+ca clarity ppm
+ca cmdb
+ca common services
+ca csm
+ca deliver
+ca dispatch
+ca msm
+ca netman
+ca opera
+ca ppm
+ca scheduler
+ca spool
+ca technologies
+ca tlms
+ca tpx
+ca unicenter asset management
+ca unicenter asset portfolio management
+ca unicenter autosys job management
+ca unicenter dsm
+ca unicenter knowledge tools
+ca unicenter nsm
+ca unicenter service accounting
+ca unicenter service catalog
+ca unicenter service desk
+ca unicenter service metric analysis
+ca unicenter software delivery
+ca view
+calypso accounting
+calypso cash management
+calypso central clearing
+calypso clearing/matching
+calypso commodity derivatives
+calypso corporate actions
+calypso credit derivatives
+calypso cross asset
+calypso derivatives
+calypso equities
+calypso equity derivatives
+calypso ers compliance
+calypso ers limited
+calypso fixed income
+calypso flow business
+calypso foreign exchange derivatives
+calypso foreign exchange/money market
+calypso front office decision support
+calypso interest rate derivatives
+calypso issuance
+calypso market data
+calypso messaging
+calypso pricing environments
+calypso reference data
+calypso repo/buy-sell back
+calypso reporting
+calypso risk configuration
+calypso risk management
+calypso scheduled tasks
+calypso settlement
+calypso static data
+calypso treasury
+calypso valuation services
+calypso workflows
+calypso workstation
+canto
+cardpac
+cello
+chordiant
+ciam
+clarify
+clickdimensions
+cloudcraze
+compuware applicationvantage
+compuware clientvantage
+compuware qa center perf. ed.
+compuware servervantage
+concorde
+concorde xal creditor
+concorde xal debitor
+concorde xal finance
+concorde xal mps
+concorde xal orders
+concorde xal project
+concorde xal purchase
+concorde xal stock
+corel word perfect
+credit risk technology
+credit risk transfer
+credit value adjustment
+criston precision
+crystal xcelsius
+cube views
+customer center/pricing center
+customer relationship management
+d4 infonet
+damgaard axapta
+damgaard c4
+damgaard c5
+damgaard xal
+datastage
+datasweep advantage
+datawarehousecenter
+digital asset management
+digital dashboard
+docflow
+doculive
+documentum
+docuware
+doors
+dracar
+drools
+e*learning fronter
+e-catalogue
+eclipse birt
+e-conomic
+edlund
+e-income
+electronic patient journal
+electronic point of sale
+emerson syncade suite
+en.safewatch
+endevour
+energy trading & risk management
+enterprise performance management
+episerver commerce
+eudora
+experian
+experian application scorecards
+experian powercurve
+experian strategy design studio
+fed
+fie
+finrep
+flexcube
+floor plan manager
+formpipe lasernet
+formscape
+frango
+geneva
+gentran integration suite
+google apps
+google chrome
+guidewire billingcenter
+guidewire claimcenter
+guidewire client data management
+guidewire insurancesuite
+guidewire live
+guidewire mobile and portals
+guidewire policycenter
+guidewire rating management
+guidewire reinsurance management
+gurock testrail
+gxs application integrator
+gxs enterprise gateway
+gxs workbench
+haiku
+heat client management
+heat cloud service management
+heat enterprise mobility management
+heat service management
+hitachi data systems
+hp business availability center
+hp oo
+hp ppm
+hp rum
+hp tv
+hp ucmdb
+hp ucmdb cm
+hp vugen
+hybris suite
+hyperion
+hyperion financial management
+hyperion interactive reporting
+hyperion planning
+hyperion smart view for office
+i*net
+ibm asf
+ibm bdw
+ibm birt
+ibm blueworks live
+ibm brms
+ibm cognos active reports
+ibm cognos business intelligence
+ibm cognos data manager
+ibm cognos framework manager
+ibm cognos planning
+ibm cognos report studio
+ibm cognos tm1
+ibm cognos transformer
+ibm connections
+ibm content manager ondemand
+ibm domino
+ibm fsdm
+ibm information framework
+ibm infosphere igc
+ibm infosphere information analyzer
+ibm infosphere warehouse
+ibm itera
+ibm lotus quickplace
+ibm lotus quickr
+ibm lotus symphony
+ibm notes
+ibm sametime
+ibm smartcloud control desk
+ibm tim
+ibm tsm
+icbs
+ifs applications
+ifs business enablers
+ifs data migration
+ifs engineering
+ifs financials
+ifs human capital management
+ifs maintenance
+ifs manufacturing
+ifs projects
+ifs sales & service
+ifs supply chain
+ilog jrules
+ims
+infor erp lx
+infor erp xa
+infor m3
+infor syteline erp
+informatica b2b data exchange
+informatica b2b data transformation
+informatica data archive
+informatica data explorer
+informatica data privacy
+informatica data quality
+informatica data subset
+informatica enterprise data integration
+informatica identity resolution
+informatica powerexchange
+infosuite
+infranet
+insis
+interwoven teamsite
+irs tax compliance
+iscala
+itello inca
+itil 4
+java mail
+jbossrules
+jd edwards world
+jeeves
+jira big picture
+jira structure
+jira tempo timesheets
+joomla!
+jupyter notebook
+kie workbench
+kingswaysoft
+krgc & krgs
+laboratory information management systems
+lessor
+life
+lifelink®
+livelink
+lotus 1-2-3
+lotus amipro
+lotus notes
+lotus smartsuite
+maconomy
+magento
+mapx
+master data management
+master data services
+mavim sis
+mcafee epo
+mdoc
+meter data management
+mfi
+microgen ost br
+microsoft 365
+microsoft advanced threat analytics
+microsoft applocker
+microsoft azure information protection
+microsoft crm
+microsoft dynamics - point of sale
+microsoft dynamics - production
+microsoft dynamics 365
+microsoft dynamics 365 - business central
+microsoft dynamics 365 - finance & operations
+microsoft dynamics 365 - marketing
+microsoft dynamics 365 - sales
+microsoft dynamics ax
+microsoft dynamics ax - debitor/creditor
+microsoft dynamics ax - enterprise portal
+microsoft dynamics ax - expense
+microsoft dynamics ax - finance
+microsoft dynamics ax - inventory
+microsoft dynamics ax - production
+microsoft dynamics ax - project
+microsoft dynamics ax - service
+microsoft dynamics ax - trade & logistics
+microsoft dynamics ax - warehouse management
+microsoft dynamics ax - workflow
+microsoft dynamics ax 2012
+microsoft dynamics c5
+microsoft dynamics crm
+microsoft dynamics crm 2011
+microsoft dynamics crm 2013
+microsoft dynamics crm 2015
+microsoft dynamics crm 2016
+microsoft dynamics crm 3.0
+microsoft dynamics crm 4.0
+microsoft dynamics crm online
+microsoft dynamics crm online 2013
+microsoft dynamics crm online 2015
+microsoft dynamics crm online 2016
+microsoft dynamics gp
+microsoft dynamics nav
+microsoft dynamics nav - crm service management
+microsoft dynamics nav - finance
+microsoft dynamics nav - job/ressources
+microsoft dynamics nav - logistics
+microsoft dynamics nav - manufacturing
+microsoft dynamics nav - production
+microsoft dynamics nav - purchase
+microsoft dynamics nav - retail
+microsoft dynamics nav - sales
+microsoft dynamics nav - stock
+microsoft dynamics nav 2015
+microsoft dynamics nav 2016
+microsoft dynamics retail management system
+microsoft dynamics sl
+microsoft dynamics snap
+microsoft enterprise cubes
+microsoft excel
+microsoft exchange online protection
+microsoft fim
+microsoft flow
+microsoft forecaster
+microsoft forms
+microsoft frx
+microsoft identity manager
+microsoft insight and analytics
+microsoft internet explorer
+microsoft intune
+microsoft mail
+microsoft management console
+microsoft office
+microsoft office 2013
+microsoft office 2016
+microsoft office 2019
+microsoft office 365
+microsoft office 365 - advanced threat protection
+microsoft office 365 - roadmap
+microsoft office project server
+microsoft outlook
+microsoft power bi
+microsoft power map
+microsoft power pivot
+microsoft power query
+microsoft power view
+microsoft powerpoint
+microsoft project
+microsoft project online
+microsoft publisher
+microsoft system center orchestrator
+microsoft teams
+microsoft visio
+microsoft word
+midas
+mindmanager
+misys loaniq
+misys summit ft
+misys trade portal
+moodle
+mozilla firefox
+multi+
+multiarchive
+murex
+mychart bedside
+nakisa sap lease administration
+navision
+navision application server
+navision attain
+navision stat
+netapp
+netreveal
+network note manager
+nextgen crm
+nintex forms
+nintex workflow
+nintex workflow cloud
+nova project management system
+novell groupwise
+novell identity manager
+ocr
+omada identity suite
+open view operation
+openidm
+openoffice
+opentext exstream
+opentext vim for sap
+opus booking
+opus journal
+opus medicine
+opus patient
+opus patient progress
+opus workplace
+oracle access manager
+oracle adaptive access manager
+oracle appstech
+oracle atg web commerce
+oracle bpel
+oracle e-business suite
+oracle e-business suite finance
+oracle e-business suite hr
+oracle e-business suite logistics
+oracle enterprise single-sign-on
+oracle entitlements server
+oracle exadata
+oracle fa
+oracle flexcube core banking
+oracle fusion middleware
+oracle hrms
+oracle hyperion enterprise
+oracle identity analytics
+oracle identity federation
+oracle identity manager
+oracle internet directory
+oracle jd edwards enterpriseone
+oracle metasolv
+oracle primavera p6
+oracle primavera p6 analytics
+oracle primavera unifier
+oracle sfm
+oracle universal content management
+orbus iserver
+osisoft pi
+oxid eshop
+papyrus
+pega bix
+pega cpm
+pega crm
+pegarules process commander
+pentaho bi suite
+peoplesoft
+peoplesoft crm
+peoplesoft vantive
+peregrine servicecenter
+pert
+pm3
+podio
+portfolio for jira
+process flow
+proconcept
+profilestage
+progress actional
+progress datadirect shadow
+progress dataxtend semantic integrator
+progress sonic esb
+progress sonicmq
+progress webspeed
+prophix
+proteus
+public 360
+qlik sense
+qlikview
+quadient inspire
+qualitystage
+qualiware analytics
+qualiware business modeler
+qualiware compliance audit and improvement
+qualiware enterprise architecture
+qualiware enterprise integrator
+qualiware enterprise publisher
+qualiware excellence manager
+qualiware health care
+qualiware integration server client
+qualiware lifecycle manager
+qualiware social behavior warehouse
+quark express
+readium
+red hat identity management
+redmine
+redprarie wms
+relation plus
+remedy applications
+remedy ars
+remedy cmdb
+renaissance erp
+resource management system
+reuter's condor
+reuters market data system
+rightnow contact center experience
+rightnow social experience
+rightnow web experience
+riskit
+rms
+sailpoint identityiq
+salesforce lightning
+salesforce marketing
+salesforce pardot
+salesforce sales
+salesforce service
+sanchez profile
+sap ale
+sap am
+sap apo
+sap authorizations
+sap basis
+sap bc
+sap bex
+sap bi
+sap bo
+sap bods
+sap bpc
+sap bsp
+sap business blueprint
+sap business one
+sap business workflow
+sap bw
+sap ca
+sap cats
+sap co
+sap crm
+sap cs
+sap dms
+sap ds
+sap dvm
+sap ebp
+sap ec
+sap ecc
+sap edocument
+sap ehs
+sap ehsm
+sap ep
+sap ewm
+sap f&r
+sap fi
+sap fico
+sap financials
+sap for life sciences
+sap fs
+sap grc
+sap gtm
+sap hana
+sap hcm
+sap hr
+sap hybris
+sap ilm
+sap im
+sap is-a
+sap is-adec
+sap is-afs
+sap is-b
+sap is-bev
+sap is-cwm
+sap is-h
+sap is-her
+sap is-hss
+sap is-ht
+sap is-m
+sap is-min
+sap is-mp
+sap is-oil
+sap is-ps
+sap is-r
+sap is-re
+sap is-rea
+sap is-sp
+sap is-t
+sap is-u
+sap list viewer
+sap lsmw
+sap lumira
+sap marketplace
+sap mdg
+sap mdm
+sap mfs
+sap mm
+sap mobilebusiness
+sap netweaver
+sap pi
+sap plm
+sap pm
+sap po
+sap portal
+sap pos dm
+sap pp
+sap ppm
+sap pp-pi
+sap ps
+sap pscd
+sap pur
+sap qm
+sap r/3
+sap s/4hana
+sap scm
+sap sd
+sap security
+sap sem
+sap sm
+sap smartforms
+sap snc
+sap solution manager
+sap srm
+sap successfactors
+sap tpm
+sap tr
+sap vc
+sap web dynpro for abap
+sap webi
+sap wf
+sap wm
+sap xi
+sas aml
+sas appdev studio
+sas bi platform
+sas cfo vision sas financial management solutions
+sas ci
+sas content categorization
+sas data quality-cleanse
+sas data surveyor for oracle
+sas di studio
+sas eg
+sas em
+sas enterprise reports
+sas fm
+sas hcm
+sas idp
+sas integration technologies
+sas it management solutions
+sas it resource management
+sas it service vision
+sas jmp
+sas ma
+sas management console
+sas olap cubes studio
+sas onlinetutor
+sas ph solutions
+sas pm
+sas risk dimensions
+sas spds
+sas statview
+sas universal odbc driver
+sas va
+sas webhound
+sas/access
+sas/af
+sas/assist
+sas/c compiler
+sas/connect
+sas/eis
+sas/ets
+sas/fsp
+sas/graph
+sas/iml
+sas/intrnet
+sas/macro
+sas/mddb server
+sas/or
+sas/qc
+sas/share
+sas/stat
+sas/toolkit
+sas/warehouse administrator
+scala5
+scanjour
+scanjour captia
+sdc kernesystem
+service asset & configuration management
+service catalogue management
+service charging management
+service continuity management
+service level management
+sharepoint 2010 content
+siebel actuate
+siebel assignment manager
+siebel browser script
+siebel crm
+siebel ebusiness
+siebel ecommunications
+siebel esales
+siebel escript
+siebel tools
+simcorp dimension
+skype for business
+smart test
+sodpow-promise
+sonwin
+squaredup
+star office
+stata
+straight-through processing
+styleman
+sugarcrm
+suitecloud
+sungard
+sunsystems
+sunsystems mis
+sunsystems other
+sunsystems sunaccounts/financials
+sunsystems sunbusiness/order fulfillment
+supercalc
+superoffice
+support magic
+surecomp allnett
+surecomp imex
+swiftalliance access
+swiftalliance gateway
+swiftalliance webstation
+swiftalliance workstation
+syclo work manager
+tableau
+talend application integration
+talend data integration
+talend master data management
+targetprocess
+targit
+taxonomy
+teamviewer
+temenos corebanking
+temenos financial reporting
+temenos prodb
+temenos t24
+templafy
+the health system's organisation register
+thomson reuters enterprise platform
+tia
+tieline
+timeline
+toolbook cbt
+topdesk
+topdesk - asset management
+topdesk - call management
+topdesk - change management
+topdesk - contract management and slm
+topdesk - event management
+topdesk - property management
+topdesk - reservations management
+topdesk - self service desk
+trados tools
+transform
+trello
+tridion r5 cms
+uinode
+uipath
+umbraco
+unified endpoint management
+unit4 agresso/unit4 business world
+veeam one
+veeva vault promomats
+vignette
+visma
+visual page
+walkme
+wallstreet systems
+warehouse manager
+wavelink avalanche
+web analytics
+webfocus
+wendia pob
+windows identity foundation
+windows intune
+winnie
+wordengine
+wordperfect
+workday
+workfront
+workpoint 365
+works
+xellent
+xmpie
+xor
+xrm
+zendesk
+zerto virtual manager
+zerto virtual replication
+adobe acrobat
+adobe after effects
+adobe air
+adobe analytics
+adobe captivate
+adobe coldfusion
+adobe dreamweaver
+adobe experience manager
+adobe fireworks
+adobe flash
+adobe flex
+adobe framemaker
+adobe illustrator
+adobe incopy
+adobe indesign
+adobe photoshop
+adobe photoshop elements
+adobe photoshop lightroom
+adobe premiere
+adobe robohelp
+adobe xd
+articulate storyline
+atomic
+autodesk 3ds max
+autodesk autocad
+autodesk inventor
+autodesk maya
+autodesk revit
+autosketch
+blackboard learn
+blender
+boxee
+cadkey 19
+canvas lms
+chamilo lms
+copywriting
+coreldraw graphics suite
+cornerstone lms
+coursera
+dash
+director mx 2004
+dokeos
+figma
+final cut pro
+final cut pro x
+flinto
+framer
+framer x
+gimp
+grafana
+gtk+
+ilias
+inkscape
+invision
+keynote
+latex
+lightscape
+mapguide open source
+marvel
+material design
+mechanical desktop
+microsoft expression
+microsoft mediaroom presentation framework
+microsoft photodraw
+mockflow
+mpeg-x
+netobjects fusion 4.0
+netobjects fusion mx
+omnigraffle
+openstreetmap
+origami studio
+paintshop pro
+picasso
+principle
+proto.io
+protopie
+quickcad
+rapidui
+scorm package
+set-top box user interfaces
+siemens nx
+sketch
+stones webwriter
+storyboard
+tealium tracking
+techsmith camtasia video editor
+television user interfaces
+totara learn
+trivantis lectora
+tumult hype 3
+user flow
+ux flowchart
+vsdc video editor
+web map service
+webtricity
+whip! viewer
+windows media player
+wireframes
+wtb system topclass lms
+zbrush
+zeplin
+application performance management
+assembla
+basecamp
+bid management
+bpcs
+business english
+business liability
+business recovery
+business requirement analysis
+business requirement documentation
+business structure
+business system
+business vault
+catalogue
+chairman
+content management
+corporate performance management
+customer engagement management
+customer journey
+customer relationship management services
+data quality management
+data vault modelling
+dw 2.0 architecture
+ecocentric management
+economic efficency
+economics - administration
+e-mail marketing
+end to end management
+enovia matrixone
+enterprise analysis
+enterprise information portals
+enterprise reporting
+external environment
+fast esp
+file management
+identity access management
+identity management
+iga
+industrial organization
+information flow management
+information structures
+ishikawa diagram
+it accounting
+k01-standardkontrakt
+k02-standardkontrakt
+k03-standardkontrakt
+learning architecture
+line & staff management
+logistic systems
+logistics management
+management
+management discussion and analysis
+management information system
+managing director
+materials management
+matrix42
+mfa
+micro economics
+microsoft protection and recovery
+misys ti plus
+nice actimize
+opex
+pam
+patch management
+permission marketing
+physical distribution management
+product information management
+purchasing and supply management
+quality management
+quest one identity manager
+request for information
+request for proposal
+request for quotation
+res automation manager
+res it store
+res workspace manager
+resource allocation
+sap is-dfs
+seeburger business integration suite
+servicenow
+small business
+smart requirements
+structured analysis sa
+structured design sd
+structured diagram sd
+structured language sl
+system management
+total productive management
+total quality management
+utility
+wonderware--- architectural patterns
+business process modeling
+command query responsibility segregation
+domain driven design
+microservices
+model-view-controller
+model-view-viewmodel
+object oriented programing
+offentlig information online xml
+restful
+service-oriented architecture
+test driven development
+finance
+government
+insurance
+media
+public sector
+pharmaceutical
+retail
+startup
+internet
+marketing
+finance and insurance
+agile software development
+architecture
+automation
+branching patterns
+cloud computing
+coverage measurement
+devops
+gitflow
+infrastructure
+infrastructure-as-code
+implementation
+integrations
+market analyse
+monitoring
+object oriented design
+object oriented programming
+private cloud
+site reliability
+soa
+static code analyse
+system integration
+ucm branching patterns
+unit testing
+virtualization
+web services
+public cloud operations
+public cloud architecture
+distributed data store operations
+relational database operations
+container orchestration
+application containerization
+continuous software delivery
+software tool development
+agile development
+infrastructure as code
+iot
+scrum
+artificial intelligence
+big data
+chief technology officer
+coaching
+configuration management
+data modeling
+database administrator
+devsecops
+distributed teams
+e-commerce
+education
+fashion
+financial services
+full stack development
+high availability
+infrastructure-as-a-service
+legal services
+machine learning
+medical industry
+multi cloud strategy
+nearshoring
+network
+network architecture
+network security
+news
+platform-as-a-service
+power supply industry
+product owner
+shipping
+sla
+site reliability engineering
+software-as-a-service
+internet of thingsd
+ansible tower
+appveyer
+chocolatey
+grunt
+jenkins ci
+ms build
+puppet enterprise
+puppet pipelines
+serverless
+subversion
+team foundation server
+terraform
+libpod / podman
+lxc
+solaris zones
+qemu/kvm
+cassandra
+kafka
+druid
+couchdb
+berkeley db
+oracle db
+ms sql server
+dynamodb
+mssql
+solr
+akamai
+amazon simple storage service
+aws cli
+azure
+google cloud
+jira
+oracle cloud
+application developer framework
+c#.net
+express
+nodejs
+pyinstaller
+bash / sh
+nodejs / javascript
+dapper
+extensible markup language
+hadoop
+mapr
+ms sql server
+oracle db
+centos
+rancheros
+windows server
+gnu/linux
+redhat enterprise linux
+fedora server
+amazon linux
+atomic host
+ubuntu server
+debian gnu/linux
+container linux
+alpine linux
+solaris
+apache2
+internet information server
+oracle weblogic
+apigee
+cdn
+ironmq
+jboss application server
+varnish cache
+redhat jboss
+ibm websphere
+git flow
+jenkins declarative pipeline
+jenkins pipeline libaries
+jenkins scripted pipeline
+circle ci
+concourse ci
+beats family
+datadog
+loggly
+papertrail
+pingdom
+server density
+apache
+api gateway
+artifactorry
+blaze
+cloudformation
+cloudwatch
+codebuild
+codedeploy
+codepipeline
+consignor
+consul
+ecs
+eloquent
+gettext
+github enterprise
+gulp
+helm
+htm
+iis
+meteor
+micro services
+molecule
+onesignal
+openshift
+phalcon
+pipelining
+raspberry pi
+spacebars
+spinnaker
+vpc
+jfrog xray
+yml
+windows
+bitbucket
+ant
+pip
+packer
+css lint
+pc-lint
+profactor
+qacpp
+selenium grid
+blazemeter
+dotcover
+ghostinspector
+rhino mock
+k6
+nose
+docker hub
+docker svarm
+os x / mac os
+redhat linux
+windows nt
+windows server 2k
+cascading style sheets
+dsi system
+html
+java 2 enterprise edition
+java 2 standard edition
+joomla
+opencv
+react js
+saml authentication
+visual basic for applications
+visual studio
+web service specifications
+websocket
+windows communication foundation
+windows presentation foundation
+clearcase
+fogbugz
+kiln
+visual studio team service
+docker-compose
+elastifile
+juju
+kubectl
+libfaketime
+maas
+swarm
+atom
+visual studio code
+elk

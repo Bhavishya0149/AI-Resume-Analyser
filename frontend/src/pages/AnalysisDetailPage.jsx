@@ -2,7 +2,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import AnalysisResult from '../components/AnalysisResult'
 
 function getGrade(score) {
-  const p = (score || 0) * 100
+  const p = (score || 0)
   if (p >= 85) return { label: 'A+', color: '#3ecf8e' }
   if (p >= 75) return { label: 'A',  color: '#3ecf8e' }
   if (p >= 65) return { label: 'B',  color: '#7c6af7' }

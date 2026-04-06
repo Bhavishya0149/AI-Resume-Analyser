@@ -1,34 +1,36 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import api from '../../api/axios'
+import { useAuth } from '../../context/AuthContext'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import ErrorAlert from '../../components/ErrorAlert'
-import { useAuth } from '../../context/AuthContext'
 
 export default function JobLeaderboardPage() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { user, isAdmin } = useAuth()
+  const { user } = useAuth()
 
   const [entries, setEntries]   = useState([])
-  const [jobTitle, setJobTitle] = useState('')
+  const [job, setJob]           = useState(null)
   const [loading, setLoading]   = useState(true)
   const [error, setError]       = useState('')
   const [removing, setRemoving] = useState(null)
 
+  const isAdminOrCreator = job && (
+    user?.roles?.includes('ADMIN') || job.createdBy === user?.id
+  )
+
   const fetchData = async () => {
     try {
-      const [lbRes, jobsRes] = await Promise.allSettled([
-        api.get(`/api/jobs/${id}/leaderboard`),
+      const [jobRes, boardRes] = await Promise.all([
         api.get('/api/jobs/public'),
+        api.get(`/api/jobs/${id}/leaderboard`),
       ])
-      if (lbRes.status   === 'fulfilled') setEntries(lbRes.value.data)
-      if (jobsRes.status === 'fulfilled') {
-        const found = jobsRes.value.data.find(j => j.id === id)
-        if (found) setJobTitle(found.title)
-      }
-    } catch {
-      setError('Failed to load leaderboard.')
+      const found = jobRes.data.find(j => j.id === id)
+      setJob(found || null)
+      setEntries(boardRes.data)
+    } catch (err) {
+      setError(err.response?.data?.error || err.response?.data?.message || 'Failed to load leaderboard.')
     } finally {
       setLoading(false)
     }
@@ -36,13 +38,12 @@ export default function JobLeaderboardPage() {
 
   useEffect(() => { fetchData() }, [id])
 
-  const handleRemove = async (applicationId, e) => {
-    e.stopPropagation()
-    if (!confirm('Remove this entry from the leaderboard?')) return
+  const handleRemove = async (applicationId) => {
+    if (!window.confirm('Remove this entry from the leaderboard?')) return
     setRemoving(applicationId)
     try {
       await api.delete(`/api/jobs/${id}/leaderboard/${applicationId}`)
-      setEntries(prev => prev.filter(x => x.id !== applicationId))
+      setEntries(prev => prev.filter(e => e.applicationId !== applicationId))
     } catch (err) {
       setError(err.response?.data?.error || err.response?.data?.message || 'Failed to remove entry.')
     } finally {
@@ -50,14 +51,14 @@ export default function JobLeaderboardPage() {
     }
   }
 
-  if (loading) return <LoadingSpinner text="Loading leaderboard…" />
+  if (loading) return <LoadingSpinner />
 
-  const medalColors = ['#fbbf24', '#9ca3af', '#b45309']
+  const medals = ['🥇', '🥈', '🥉']
 
   return (
     <div>
-      <div style={{ marginBottom: '1rem' }}>
-        <button className="btn btn-ghost btn-sm" onClick={() => navigate(`/jobs/${id}`)}>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <button onClick={() => navigate(`/jobs/${id}`)} className="btn btn-ghost btn-sm">
           ← Back to Job
         </button>
       </div>
@@ -65,15 +66,15 @@ export default function JobLeaderboardPage() {
       <div className="page-header">
         <div>
           <h1 className="page-title">🏆 <span>Leaderboard</span></h1>
-          {jobTitle && (
+          {job && (
             <p style={{ color: 'var(--muted)', fontSize: '0.875rem', marginTop: '0.2rem' }}>
-              {jobTitle}
+              {job.title}{job.organisationName ? ` · ${job.organisationName}` : ''}
             </p>
           )}
         </div>
-        <span style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>
-          {entries.length} {entries.length === 1 ? 'applicant' : 'applicants'}
-        </span>
+        {isAdminOrCreator && (
+          <Link to={`/jobs/${id}/edit`} className="btn btn-secondary btn-sm">✏️ Edit Job</Link>
+        )}
       </div>
 
       <ErrorAlert message={error} onClose={() => setError('')} />
@@ -82,128 +83,109 @@ export default function JobLeaderboardPage() {
         <div className="empty-state">
           <div className="empty-state-icon">🏆</div>
           <h3>No applicants yet</h3>
-          <p>Be the first to apply!</p>
+          <p style={{ marginTop: '0.4rem' }}>Be the first to apply!</p>
+          <Link to={`/jobs/${id}`} className="btn btn-primary btn-sm" style={{ marginTop: '1rem' }}>
+            Apply Now
+          </Link>
         </div>
       ) : (
-        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-          <div className="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>Rank</th>
-                  <th>Applicant</th>
-                  <th>Resume</th>
-                  <th>Score</th>
-                  <th>Skill Match</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {entries.map((entry, i) => {
-                  const pct      = ((entry.qualificationScore || 0) * 100).toFixed(1)
-                  const skillPct = ((entry.skillMatchPercentage || 0)).toFixed(1)
-                  const isOwn    = entry.userId === user?.id
-                  const canRemove = isAdmin() || isOwn
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+          {entries.map((entry, i) => {
+            const score = entry.qualificationScore || 0
+            const scoreColor = score >= 75 ? 'var(--success)' : score >= 50 ? 'var(--accent)' : 'var(--danger)'
+            const isOwnEntry = entry.userProfile?.id === user?.id
 
-                  return (
-                    <tr key={entry.id || i} style={isOwn ? { background: 'rgba(124,106,247,0.06)' } : {}}>
-                      <td>
-                        {i < 3 ? (
-                          <span style={{ fontSize: '1.2rem' }}>
-                            {i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'}
-                          </span>
-                        ) : (
-                          <span style={{ fontWeight: 700, color: 'var(--muted)' }}>#{i + 1}</span>
-                        )}
-                      </td>
-                      <td>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <div style={{
-                            width: 28, height: 28,
-                            borderRadius: '50%',
-                            background: i < 3 ? `${medalColors[i]}22` : 'var(--surface2)',
-                            border: `2px solid ${i < 3 ? medalColors[i] : 'var(--border)'}`,
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: '0.7rem', fontWeight: 700,
-                            color: i < 3 ? medalColors[i] : 'var(--muted)',
-                            flexShrink: 0,
-                          }}>
-                            {entry.userId?.substring(0, 2).toUpperCase()}
-                          </div>
-                          <span style={{ fontFamily: 'monospace', fontSize: '0.78rem', color: 'var(--muted)' }}>
-                            {entry.userId?.substring(0, 12)}…
-                            {isOwn && (
-                              <span style={{
-                                marginLeft: '0.4rem',
-                                background: 'rgba(124,106,247,0.15)',
-                                color: 'var(--accent)',
-                                borderRadius: 20,
-                                padding: '0.1rem 0.4rem',
-                                fontSize: '0.68rem',
-                                fontWeight: 700,
-                              }}>
-                                you
-                              </span>
-                            )}
-                          </span>
-                        </div>
-                      </td>
-                      <td style={{ fontFamily: 'monospace', fontSize: '0.78rem', color: 'var(--muted)' }}>
-                        {entry.resumeId?.substring(0, 10)}…
-                      </td>
-                      <td>
-                        <span style={{
-                          fontWeight: 800,
-                          fontSize: '0.95rem',
-                          color: parseFloat(pct) >= 70
-                            ? 'var(--success)'
-                            : parseFloat(pct) >= 50
-                              ? 'var(--accent)'
-                              : 'var(--danger)',
-                        }}>
-                          {pct}%
-                        </span>
-                      </td>
-                      <td>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                          <div style={{
-                            width: 60, height: 6,
-                            background: 'var(--surface2)',
-                            borderRadius: 3,
-                            overflow: 'hidden',
-                          }}>
-                            <div style={{
-                              height: '100%',
-                              width: `${Math.min(parseFloat(skillPct), 100)}%`,
-                              background: 'linear-gradient(90deg, var(--accent), #a78bfa)',
-                              borderRadius: 3,
-                            }} />
-                          </div>
-                          <span style={{ fontSize: '0.8rem', color: 'var(--muted)' }}>
-                            {skillPct}%
-                          </span>
-                        </div>
-                      </td>
-                      <td>
-                        {canRemove && (
-                          <button
-                            className="btn btn-danger btn-sm"
-                            disabled={removing === entry.id}
-                            onClick={(e) => handleRemove(entry.id, e)}
-                            title="Remove from leaderboard"
-                          >
-                            {removing === entry.id ? '…' : '🗑'}
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
+            return (
+              <div key={entry.applicationId}
+                style={{
+                  background: isOwnEntry ? 'rgba(124,106,247,0.06)' : 'var(--surface)',
+                  border: `1px solid ${isOwnEntry ? 'var(--accent)' : 'var(--border)'}`,
+                  borderRadius: 14, padding: '1.25rem 1.5rem',
+                  display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap',
+                }}
+              >
+                {/* Rank */}
+                <div style={{
+                  width: 44, flexShrink: 0, textAlign: 'center',
+                  fontSize: i < 3 ? '1.5rem' : '1rem',
+                  fontWeight: 700,
+                  color: i < 3 ? 'var(--accent)' : 'var(--muted)',
+                }}>
+                  {i < 3 ? medals[i] : `#${i + 1}`}
+                </div>
+
+                {/* Avatar + Name */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', minWidth: 160 }}>
+                  <div style={{
+                    width: 42, height: 42, borderRadius: '50%', flexShrink: 0,
+                    background: 'var(--accent)', color: 'white',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontWeight: 700, fontSize: '1rem', overflow: 'hidden',
+                  }}>
+                    {entry.userProfile?.profilePictureUrl
+                      ? <img src={entry.userProfile.profilePictureUrl} alt=""
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      : (entry.userProfile?.name?.[0]?.toUpperCase() || '?')
+                    }
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>
+                      {entry.userProfile?.name || 'Unknown'}
+                      {isOwnEntry && <span style={{ fontSize: '0.72rem', color: 'var(--accent)', marginLeft: '0.4rem' }}>You</span>}
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>
+                      Applied {entry.appliedAt ? new Date(entry.appliedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '—'}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Score bar */}
+                <div style={{ flex: 1, minWidth: 180 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--muted)', marginBottom: '0.3rem' }}>
+                    <span>Match Score</span>
+                    <span style={{ fontWeight: 700, color: scoreColor }}>{score.toFixed(1)}%</span>
+                  </div>
+                  <div style={{ height: 7, background: 'var(--surface2)', borderRadius: 4, overflow: 'hidden' }}>
+                    <div style={{ height: '100%', borderRadius: 4, width: `${score}%`, background: `linear-gradient(90deg, var(--accent), #a78bfa)`, transition: 'width 0.8s ease' }} />
+                  </div>
+                  <div style={{ display: 'flex', gap: '1rem', marginTop: '0.35rem' }}>
+                    <MiniScore label="Skills" value={entry.skillMatchPercentage} />
+                    <MiniScore label="Embedding" value={entry.embeddingSimilarity} />
+                    <MiniScore label="TF-IDF" value={entry.tfidfSimilarity} />
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0, alignItems: 'center' }}>
+                  {/* Resume link — visible to own entry or admin/creator */}
+                  {entry.resumeUrl && (
+                    <a href={entry.resumeUrl} target="_blank" rel="noopener noreferrer"
+                      className="btn btn-ghost btn-sm" title="View Resume">
+                      📄 Resume
+                    </a>
+                  )}
+                  {(isAdminOrCreator || isOwnEntry) && (
+                    <button className="btn btn-danger btn-sm"
+                      disabled={removing === entry.applicationId}
+                      onClick={() => handleRemove(entry.applicationId)}
+                      title="Remove entry">
+                      {removing === entry.applicationId ? '…' : '✕'}
+                    </button>
+                  )}
+                </div>
+              </div>
+            )
+          })}
         </div>
       )}
     </div>
+  )
+}
+
+function MiniScore({ label, value }) {
+  return (
+    <span style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>
+      {label}: <strong style={{ color: 'var(--text)' }}>{(value || 0).toFixed(0)}%</strong>
+    </span>
   )
 }

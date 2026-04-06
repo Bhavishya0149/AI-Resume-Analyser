@@ -5,6 +5,7 @@ import com.example.resumeai.service.AiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.example.resumeai.exception.ApiException;
 
 import java.util.Map;
 import java.util.List;
@@ -36,7 +37,7 @@ public class AiServiceImpl implements AiService {
         );
 
         if (response == null) {
-            throw new RuntimeException("AI service returned null response");
+            throw new ApiException("AI service returned null response");
         }
 
         return AiResult.builder()

@@ -173,6 +173,7 @@ public class JobServiceImpl implements JobService {
         return JobResponse.builder()
                 .id(job.getId())
                 .title(job.getTitle())
+                .descriptionText(job.getDescriptionText())
                 .shortDescription(job.getShortDescription())
                 .organisationName(job.getOrganisationName())
                 .isPublic(job.getIsPublic())

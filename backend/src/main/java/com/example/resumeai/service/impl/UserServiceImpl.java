@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
                 .profilePictureUrl(user.getProfilePictureUrl())
                 .roles(user.getRoles().stream().map(Enum::name).collect(Collectors.toSet()))
                 .recruiterVerified(user.getRecruiterVerified())
+                .authProvider(user.getAuthProvider() != null ? user.getAuthProvider().name() : null)
                 .build();
     }
 

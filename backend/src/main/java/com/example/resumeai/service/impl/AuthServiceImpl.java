@@ -177,12 +177,18 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UnauthorizedException("Invalid credentials"));
 
-        if (!Boolean.TRUE.equals(user.getIsEmailVerified())) {
-            throw new ForbiddenException("Email not verified");
+        if (user.getAuthProvider() == AuthProvider.GOOGLE) {
+            throw new ConflictException(
+                    "Account registered with Google. Use Google login."
+            );
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
             throw new UnauthorizedException("Invalid credentials");
+        }
+
+        if (!Boolean.TRUE.equals(user.getIsEmailVerified())) {
+            throw new ForbiddenException("Email not verified");
         }
 
         String token = jwtUtil.generateToken(

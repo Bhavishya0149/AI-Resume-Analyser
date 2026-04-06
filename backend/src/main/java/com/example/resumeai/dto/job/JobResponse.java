@@ -15,6 +15,7 @@ public class JobResponse {
     private String organisationName;
     private Boolean isPublic;
     private Boolean allowApplications;
+    private String descriptionText;
     private Boolean isActive;
     private String contactEmail;
     private String contactPhone;

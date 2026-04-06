@@ -15,4 +15,5 @@ public class UserProfileResponse {
     private String profilePictureUrl;
     private Set<String> roles;
     private Boolean recruiterVerified;
+    private String authProvider;
 }

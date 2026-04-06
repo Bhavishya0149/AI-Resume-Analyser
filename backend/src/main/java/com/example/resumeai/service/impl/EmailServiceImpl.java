@@ -142,7 +142,7 @@ public class EmailServiceImpl implements EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setText(htmlBody, true);  // true = HTML
+            helper.setText(htmlBody, true); 
             mailSender.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send email to " + to, e);

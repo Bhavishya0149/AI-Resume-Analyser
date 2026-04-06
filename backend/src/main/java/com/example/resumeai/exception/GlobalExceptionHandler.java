@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<?> handleApi(ApiException ex) {
-        return build(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
     @ExceptionHandler(UnauthorizedException.class)
