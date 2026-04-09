@@ -12,4 +12,6 @@ public interface ApplicationService {
     List<LeaderboardEntryResponse> getLeaderboard(String jobId);
 
     void removeFromLeaderboard(String jobId, String applicationId);
+
+    LeaderboardEntryResponse getApplicationById(String applicationId);
 }

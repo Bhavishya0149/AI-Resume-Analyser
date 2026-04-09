@@ -116,7 +116,6 @@ public class ApplicationServiceImpl implements ApplicationService {
                             .build())
                     .orElse(null);
 
-            // Resume URL: visible to the applicant themselves, the creator, and admins
             String resumeUrl = null;
             boolean isOwnApplication = app.getUserId().equals(currentUserId);
 
@@ -166,4 +165,57 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         applicationRepository.delete(application);
     }
+
+    @Override
+	public LeaderboardEntryResponse getApplicationById(String applicationId) {
+
+	String currentUserId = SecurityUtil.getCurrentUserId();
+
+	Application app = applicationRepository.findById(applicationId)
+			.orElseThrow(() -> new NotFoundException("Application not found"));
+
+	JobPosting job = jobPostingRepository.findById(app.getJobPostingId())
+			.orElseThrow(() -> new NotFoundException("Job not found"));
+
+	User currentUser = userRepository.findById(currentUserId)
+			.orElseThrow(() -> new NotFoundException("User not found"));
+
+	boolean isAdmin = currentUser.getRoles().contains(Role.ADMIN);
+	boolean isCreator = job.getCreatedBy().equals(currentUserId);
+	boolean isOwner = app.getUserId().equals(currentUserId);
+
+	if (!isAdmin && !isCreator && !isOwner) {
+			throw new ForbiddenException("Not allowed to view this analysis");
+	}
+
+	LeaderboardEntryResponse.UserSnapshot snapshot = userRepository
+			.findById(app.getUserId())
+			.map(u -> LeaderboardEntryResponse.UserSnapshot.builder()
+					.id(u.getId())
+					.name(u.getName())
+					.profilePictureUrl(u.getProfilePictureUrl())
+					.build())
+			.orElse(null);
+
+	String resumeUrl = null;
+	if (isAdmin || isCreator || isOwner) {
+			resumeUrl = resumeRepository.findById(app.getResumeId())
+					.map(Resume::getCloudinaryUrl)
+					.orElse(null);
+	}
+
+	return LeaderboardEntryResponse.builder()
+			.applicationId(app.getId())
+			.qualificationScore(app.getQualificationScore())
+			.tfidfSimilarity(app.getTfidfSimilarity())
+			.embeddingSimilarity(app.getEmbeddingSimilarity())
+			.skillMatchPercentage(app.getSkillMatchPercentage())
+			.matchedSkills(app.getMatchedSkills())
+			.missingSkills(app.getMissingSkills())
+			.resumeUrl(resumeUrl)
+			.appliedAt(app.getCreatedAt())
+			.userProfile(snapshot)
+			.build();
+	}
+
 }

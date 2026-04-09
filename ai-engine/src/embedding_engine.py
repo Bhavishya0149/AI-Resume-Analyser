@@ -9,7 +9,7 @@ os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
 
 logging.getLogger("sentence_transformers").setLevel(logging.ERROR)
 logging.getLogger("transformers").setLevel(logging.ERROR)
-logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
+logging.getLogger("huggingfac   e_hub").setLevel(logging.ERROR)
 
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -37,3 +37,4 @@ class EmbeddingSimilarity:
         )[0][0]
 
         return round(similarity * 100, 2)
+

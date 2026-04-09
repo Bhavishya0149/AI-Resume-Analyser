@@ -2,6 +2,7 @@ package com.example.resumeai.controller;
 
 import com.example.resumeai.dto.ai.AiResult;
 import com.example.resumeai.service.ApplicationService;
+import com.example.resumeai.dto.application.LeaderboardEntryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +37,10 @@ public class ApplicationController {
     ) {
         applicationService.removeFromLeaderboard(jobId, applicationId);
         return ResponseEntity.ok(Map.of("message", "Entry removed from leaderboard"));
+    }
+
+    @GetMapping("/api/analysis/{id}")
+    public LeaderboardEntryResponse getAnalysis(@PathVariable String id) {
+        return applicationService.getApplicationById(id);
     }
 }
