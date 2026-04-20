@@ -18,7 +18,7 @@
     <name>resume-ai-backend</name>
 
     <properties>
-        <java.version>25</java.version>
+        <java.version>21</java.version>
     </properties>
 
     <dependencies>
