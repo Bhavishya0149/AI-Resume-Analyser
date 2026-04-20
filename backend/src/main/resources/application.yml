@@ -4,13 +4,13 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://bhavishya0149:mongodbpassword@clustervoldo.rthg5.mongodb.net/resume_systeam?
+      uri: ${MONGO_URI}
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username: wealthzofn@gmail.com
-    password: ceibjebaehiothqz
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -20,7 +20,7 @@ spring:
 
 app:
   jwt:
-    secret: 404E635266556A586E3272357GF8782F413F4428472B4B7250645367566B5970
+    secret: ${JWT_SECRET}
     expiration-ms: 86400000
 
   resume:
@@ -45,6 +45,6 @@ app:
     max-size-bytes: 2097152
 
 cloudinary:
-  cloud-name: dncnmrjkz
-  api-key: 248194812248412
-  api-secret: WXTTwdBPg2ycJK3fGIknGTPG2gA
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
