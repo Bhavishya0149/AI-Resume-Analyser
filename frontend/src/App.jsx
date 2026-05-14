@@ -4,12 +4,7 @@ import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
 import RoleRoute from './components/RoleRoute'
 import LoadingSpinner from './components/LoadingSpinner'
-
-import LoginPage             from './pages/auth/LoginPage'
-import SignupPage            from './pages/auth/SignupPage'
-import VerifyEmailPage       from './pages/auth/VerifyEmailPage'
-import ResetPasswordRequest  from './pages/auth/ResetPasswordRequestPage'
-import ResetPasswordPage     from './pages/auth/ResetPasswordPage'
+import LoginPage from './pages/auth/LoginPage'
 
 const DashboardPage      = lazy(() => import('./pages/DashboardPage'))
 const ResumesPage        = lazy(() => import('./pages/ResumesPage'))
@@ -33,34 +28,30 @@ export default function App() {
   return (
     <Suspense fallback={<Fallback />}>
       <Routes>
-        <Route path="/login"                  element={<LoginPage />} />
-        <Route path="/signup"                 element={<SignupPage />} />
-        <Route path="/verify-email"           element={<VerifyEmailPage />} />
-        <Route path="/reset-password-request" element={<ResetPasswordRequest />} />
-        <Route path="/reset-password"         element={<ResetPasswordPage />} />
+        <Route path="/login" element={<LoginPage />} />
 
         <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-          <Route path="/dashboard"             element={<DashboardPage />} />
-          <Route path="/resumes"               element={<ResumesPage />} />
-          <Route path="/jobs"                  element={<JobListingsPage />} />
-          <Route path="/jobs/create"           element={
+          <Route path="/dashboard"            element={<DashboardPage />} />
+          <Route path="/resumes"              element={<ResumesPage />} />
+          <Route path="/jobs"                 element={<JobListingsPage />} />
+          <Route path="/jobs/create"          element={
             <RoleRoute allowedRoles={['RECRUITER','ADMIN']}>
               <CreateJobPage />
             </RoleRoute>
           }/>
-          <Route path="/jobs/my"               element={<MyJobsPage />} />
-          <Route path="/jobs/:id"              element={<JobDetailsPage />} />
-          <Route path="/jobs/:id/leaderboard"  element={<JobLeaderboard />} />
-          <Route path="/analyze"               element={<AnalyzePage />} />
-          <Route path="/history"               element={<HistoryPage />} />
-          <Route path="/history/:id"           element={<AnalysisDetailPage />} />
-          <Route path="/profile"               element={<ProfilePage />} />
-          <Route path="/admin"                 element={
+          <Route path="/jobs/my"              element={<MyJobsPage />} />
+          <Route path="/jobs/:id"             element={<JobDetailsPage />} />
+          <Route path="/jobs/:id/leaderboard" element={<JobLeaderboard />} />
+          <Route path="/analyze"              element={<AnalyzePage />} />
+          <Route path="/history"              element={<HistoryPage />} />
+          <Route path="/history/:id"          element={<AnalysisDetailPage />} />
+          <Route path="/profile"              element={<ProfilePage />} />
+          <Route path="/admin"                element={
             <RoleRoute allowedRoles={['ADMIN']}>
               <AdminPage />
             </RoleRoute>
           }/>
-          <Route path="/jobs/:id/edit" element={
+          <Route path="/jobs/:id/edit"        element={
             <RoleRoute allowedRoles={['RECRUITER','ADMIN']}>
               <EditJobPage />
             </RoleRoute>

@@ -14,13 +14,12 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    const status   = err.response?.status
-    const hasBody  = !!(err.response?.data?.error || err.response?.data?.message)
+    const status  = err.response?.status
+    const hasBody = !!(err.response?.data?.error || err.response?.data?.message)
 
     if (status === 401 && !hasBody) {
       const token = localStorage.getItem('token')
-      const AUTH_PATHS = ['/login', '/signup', '/verify-email', '/reset-password']
-      const onAuthPage = AUTH_PATHS.some(p => window.location.pathname.startsWith(p))
+      const onAuthPage = window.location.pathname.startsWith('/login')
 
       if (token && !onAuthPage) {
         localStorage.removeItem('token')

@@ -4,15 +4,11 @@ import com.example.resumeai.dto.auth.*;
 
 public interface AuthService {
 
-    void signup(SignupRequest request);
+    void sendOtp(SendOtpRequest request);
 
-    void verifyEmail(VerifyOtpRequest request);
+    AuthResponse verifyOtpAndLogin(VerifyOtpRequest request);
 
-    AuthResponse login(LoginRequest request);
-
-    void requestPasswordReset(String email);
-
-    void resetPasswordWithToken(ResetPasswordWithTokenRequest request);
+    AuthResponse googleLogin(LoginRequest request);
 
     void resendOtp(String email);
 }

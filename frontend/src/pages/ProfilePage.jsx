@@ -1,298 +1,364 @@
-import { useState, useRef, useEffect } from 'react'
-import { useAuth } from '../context/AuthContext'
+import { useState, useEffect, useRef } from 'react'
 import api from '../api/axios'
 import ErrorAlert from '../components/ErrorAlert'
 import LoadingSpinner from '../components/LoadingSpinner'
 
+function InfoRow({ label, value }) {
+  return (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '0.65rem 0',
+      borderBottom: '1px solid var(--border)',
+      gap: '1rem',
+      flexWrap: 'wrap',
+    }}>
+      <span style={{ color: 'var(--muted)', fontSize: '0.875rem', fontWeight: 600 }}>{label}</span>
+      <span style={{ fontSize: '0.875rem', textAlign: 'right' }}>{value || '—'}</span>
+    </div>
+  )
+}
+
 export default function ProfilePage() {
-  const { user: authUser, logout } = useAuth()
+  const [profile, setProfile]   = useState(null)
+  const [loading, setLoading]   = useState(true)
+  const [saving, setSaving]     = useState(false)
+  const [error, setError]       = useState('')
+  const [success, setSuccess]   = useState('')
 
-  const [profile, setProfile]         = useState(null)
-  const [profileLoading, setProfileLoading] = useState(true)
-
-  const [name, setName]               = useState('')
-  const [newEmail, setNewEmail]       = useState('')
-  const [newPassword, setNewPassword] = useState('')
-  const [currentPassword, setCurrentPassword] = useState('')
+  // Editable fields
+  const [name, setName]                 = useState('')
   const [requestedRole, setRequestedRole] = useState('USER')
-  const [saving, setSaving]           = useState(false)
+
+  // Profile picture
+  const [picFile, setPicFile]       = useState(null)
+  const [picPreview, setPicPreview] = useState(null)
   const [removingPic, setRemovingPic] = useState(false)
-  const [error, setError]             = useState('')
-  const [success, setSuccess]         = useState('')
-  const [previewUrl, setPreviewUrl]   = useState(null)
-  const [picFile, setPicFile]         = useState(null)
-  const fileRef = useRef()
+  const fileInputRef = useRef()
 
   useEffect(() => {
-    api.get('/api/users/me')
-      .then(res => {
-        setProfile(res.data)
-        setName(res.data.name || '')
-        setPreviewUrl(res.data.profilePictureUrl || null)
-        setRequestedRole(res.data.roles?.includes('RECRUITER') ? 'RECRUITER' : 'USER')
-      })
-      .catch(() => setError('Failed to load profile.'))
-      .finally(() => setProfileLoading(false))
+    fetchProfile()
   }, [])
 
-  const isGoogle    = profile?.authProvider === 'GOOGLE'
-  const isRecruiter = profile?.roles?.includes('RECRUITER')
-  const currentRole = isRecruiter ? 'RECRUITER' : 'USER'
+  const fetchProfile = async () => {
+    setLoading(true)
+    try {
+      const { data } = await api.get('/api/users/me')
+      setProfile(data)
+      setName(data.name || '')
+      // Determine current role
+      if (data.roles?.includes('RECRUITER')) {
+        setRequestedRole('RECRUITER')
+      } else {
+        setRequestedRole('USER')
+      }
+    } catch {
+      setError('Failed to load profile.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handlePicChange = (e) => {
     const file = e.target.files?.[0]
     if (!file) return
     setPicFile(file)
-    setPreviewUrl(URL.createObjectURL(file))
+    setPicPreview(URL.createObjectURL(file))
   }
 
-  const handleRemovePicture = async () => {
-    if (!window.confirm('Remove your profile picture?')) return
-    setError(''); setSuccess('')
+  const handleRemovePic = async () => {
+    setError('')
+    setSuccess('')
     setRemovingPic(true)
     try {
       await api.delete('/api/users/me/profile-picture')
-      setPreviewUrl(null)
-      setPicFile(null)
       setProfile(prev => ({ ...prev, profilePictureUrl: null }))
+      setPicFile(null)
+      setPicPreview(null)
       setSuccess('Profile picture removed.')
     } catch (err) {
-      setError(err.response?.data?.error || err.response?.data?.message || 'Failed to remove picture.')
+      setError(err.response?.data?.error || 'Failed to remove profile picture.')
     } finally {
       setRemovingPic(false)
     }
   }
 
-  const handleSave = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setError(''); setSuccess('')
+    setError('')
+    setSuccess('')
 
-    const requestData = {}
-    if (name.trim() && name !== profile?.name)    requestData.name = name.trim()
-    if (!isGoogle && newEmail.trim())             requestData.newEmail = newEmail.trim()
-    if (!isGoogle && newPassword)                 requestData.newPassword = newPassword
-    if (!isGoogle && currentPassword)             requestData.currentPassword = currentPassword
-    if (requestedRole !== currentRole)            requestData.requestedRole = requestedRole
+    const hasNameChange = name.trim() && name.trim() !== profile?.name
+    const currentRole   = profile?.roles?.includes('RECRUITER') ? 'RECRUITER' : 'USER'
+    const hasRoleChange = requestedRole !== currentRole
+    const hasPicChange  = !!picFile
 
-    if (!picFile && Object.keys(requestData).length === 0) {
-      return setError('No changes to save.')
+    if (!hasNameChange && !hasRoleChange && !hasPicChange) {
+      setError('No changes to save.')
+      return
     }
 
     setSaving(true)
     try {
-      const fd = new FormData()
-      if (Object.keys(requestData).length > 0) {
-        fd.append('data', new Blob([JSON.stringify(requestData)], { type: 'application/json' }))
+      const payload = {}
+      if (hasNameChange)  payload.name = name.trim()
+      if (hasRoleChange)  payload.requestedRole = requestedRole
+
+      const formData = new FormData()
+      if (Object.keys(payload).length > 0) {
+        formData.append('data', new Blob([JSON.stringify(payload)], { type: 'application/json' }))
       }
-      if (picFile) fd.append('profilePicture', picFile)
+      if (hasPicChange) {
+        formData.append('profilePicture', picFile)
+      }
 
-      await api.put('/api/users/me', fd)
-
-      // Re-fetch to reflect server-side changes
-      const { data } = await api.get('/api/users/me')
-      setProfile(data)
-      setName(data.name || '')
-      setPreviewUrl(data.profilePictureUrl || null)
-      setRequestedRole(data.roles?.includes('RECRUITER') ? 'RECRUITER' : 'USER')
+      await api.put('/api/users/me', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
 
       setSuccess('Profile updated successfully.')
-      setNewPassword(''); setCurrentPassword(''); setNewEmail('')
       setPicFile(null)
+      setPicPreview(null)
+      await fetchProfile()
     } catch (err) {
-      setError(err.response?.data?.error || err.response?.data?.message || 'Failed to update profile.')
+      setError(err.response?.data?.error || 'Failed to update profile.')
     } finally {
       setSaving(false)
     }
   }
 
-  if (profileLoading) return <LoadingSpinner />
+  if (loading) return <LoadingSpinner text="Loading profile…" />
 
-  const initial = profile?.name?.[0]?.toUpperCase() || '?'
+  const avatarSrc = picPreview || profile?.profilePictureUrl
+  const initials  = profile?.name?.charAt(0)?.toUpperCase() || '?'
+  const isGoogle  = profile?.authProvider === 'GOOGLE'
 
   return (
-    <div style={{ maxWidth: 640, margin: '0 auto' }}>
+    <div style={{ maxWidth: 680, margin: '0 auto' }}>
+      {/* Page Header */}
       <div className="page-header">
-        <h1 className="page-title">👤 My <span>Profile</span></h1>
+        <h1 className="page-title">My <span>Profile</span></h1>
       </div>
 
-      <div className="card" style={{ marginBottom: '1.25rem' }}>
-        <ErrorAlert message={error} onClose={() => setError('')} />
-        {success && <div className="alert alert-success" style={{ marginBottom: '1rem' }}>✅ {success}</div>}
+      <ErrorAlert
+        message={error}
+        onClose={() => setError('')}
+      />
 
-        {/* Avatar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
-          <div style={{
-            width: 90, height: 90, borderRadius: '50%',
-            background: 'var(--accent)', display: 'flex',
-            alignItems: 'center', justifyContent: 'center',
-            fontSize: '2rem', fontWeight: 700, color: 'white',
-            overflow: 'hidden', flexShrink: 0,
-          }}>
-            {previewUrl
-              ? <img src={previewUrl} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              : initial
-            }
-          </div>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '0.25rem' }}>{profile?.name}</div>
-            <div style={{ color: 'var(--muted)', fontSize: '0.85rem', marginBottom: '0.75rem' }}>{profile?.email}</div>
-            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-              <button className="btn btn-secondary btn-sm"
-                onClick={() => fileRef.current?.click()}
-                disabled={saving || removingPic}>
-                {picFile ? '✅ New pic selected' : '📷 Change Photo'}
-              </button>
-              {previewUrl && !picFile && (
-                <button className="btn btn-danger btn-sm"
-                  onClick={handleRemovePicture}
-                  disabled={saving || removingPic}>
-                  {removingPic ? '⏳ Removing…' : '🗑 Remove Photo'}
-                </button>
-              )}
-              <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp"
-                style={{ display: 'none' }} onChange={handlePicChange} />
-            </div>
-          </div>
+      {success && (
+        <div className="alert alert-success" style={{ marginBottom: '1rem' }}>
+          ✅ {success}
         </div>
+      )}
 
-        <form onSubmit={handleSave} noValidate>
-
-          {/* Display name — always editable */}
-          <div className="form-group">
-            <label>Display Name</label>
-            <input type="text" value={name}
-              onChange={e => setName(e.target.value)} disabled={saving} />
-          </div>
-
-          {/* Role switch — always available */}
-          <div className="form-group">
-            <label>Account Role</label>
-            <div className="role-toggle">
-              <button type="button"
-                className={`role-option ${requestedRole === 'USER' ? 'active' : ''}`}
-                onClick={() => setRequestedRole('USER')}>
-                🎯 Job Seeker
-              </button>
-              <button type="button"
-                className={`role-option ${requestedRole === 'RECRUITER' ? 'active' : ''}`}
-                onClick={() => setRequestedRole('RECRUITER')}>
-                💼 Recruiter
-              </button>
+      {/* Avatar Section */}
+      <div className="card" style={{ marginBottom: '1.25rem' }}>
+        <div className="profile-avatar-section">
+          {/* Avatar */}
+          <div
+            className="profile-avatar"
+            onClick={() => fileInputRef.current?.click()}
+            title="Click to change profile picture"
+            style={{ cursor: 'pointer', position: 'relative', flexShrink: 0 }}
+          >
+            {avatarSrc
+              ? <img src={avatarSrc} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              : initials
+            }
+            {/* Camera overlay */}
+            <div style={{
+              position: 'absolute', inset: 0, borderRadius: '50%',
+              background: 'rgba(0,0,0,0.4)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              opacity: 0, transition: 'opacity 0.2s',
+              fontSize: '1.3rem',
+            }}
+              onMouseEnter={e => e.currentTarget.style.opacity = 1}
+              onMouseLeave={e => e.currentTarget.style.opacity = 0}
+            >
+              📷
             </div>
-            {requestedRole === 'RECRUITER' && !isRecruiter && (
-              <div className="alert alert-warn" style={{ marginTop: 0 }}>
-                ⚠️ Switching to Recruiter requires admin verification before you can post public jobs.
-              </div>
-            )}
-            {requestedRole === 'RECRUITER' && isRecruiter && !profile?.recruiterVerified && (
-              <div className="alert alert-info" style={{ marginTop: 0 }}>
-                ℹ️ Your recruiter account is pending admin verification.
-              </div>
-            )}
           </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            style={{ display: 'none' }}
+            onChange={handlePicChange}
+          />
 
-          {/* Email + password — hidden entirely for Google users */}
-          {isGoogle ? (
-            <div className="alert alert-info" style={{ marginBottom: '1.25rem', fontSize: '0.875rem' }}>
-              🔵 You signed in with Google. Email and password are managed through your Google account.
+          {/* Name + Role badges */}
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 700, fontSize: '1.15rem', marginBottom: '0.25rem' }}>
+              {profile?.name}
             </div>
-          ) : (
-            <>
-              <div style={{
-                borderTop: '1px solid var(--border)',
-                paddingTop: '1.25rem', marginTop: '0.25rem', marginBottom: '1.25rem'
-              }}>
-                <div style={{
-                  fontSize: '0.78rem', fontWeight: 700, color: 'var(--muted)',
-                  textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '1rem'
+            <div style={{ color: 'var(--muted)', fontSize: '0.875rem', marginBottom: '0.6rem' }}>
+              {profile?.email}
+            </div>
+            <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+              {profile?.roles?.map(role => (
+                <span key={role} style={{
+                  padding: '0.2rem 0.65rem', borderRadius: 20, fontSize: '0.75rem',
+                  fontWeight: 700,
+                  background: role === 'ADMIN'
+                    ? 'rgba(224,85,85,0.15)' : role === 'RECRUITER'
+                      ? 'rgba(124,106,247,0.15)' : 'rgba(62,207,142,0.12)',
+                  color: role === 'ADMIN'
+                    ? 'var(--danger)' : role === 'RECRUITER'
+                      ? 'var(--accent)' : 'var(--success)',
+                  border: `1px solid ${role === 'ADMIN'
+                    ? 'rgba(224,85,85,0.3)' : role === 'RECRUITER'
+                      ? 'rgba(124,106,247,0.3)' : 'rgba(62,207,142,0.3)'}`,
                 }}>
-                  Email & Password
-                </div>
+                  {role === 'ADMIN' ? '👑' : role === 'RECRUITER' ? '🏢' : '👤'} {role}
+                </span>
+              ))}
+              {profile?.recruiterVerified && (
+                <span style={{
+                  padding: '0.2rem 0.65rem', borderRadius: 20, fontSize: '0.75rem',
+                  fontWeight: 700,
+                  background: 'rgba(62,207,142,0.12)', color: 'var(--success)',
+                  border: '1px solid rgba(62,207,142,0.3)',
+                }}>
+                  ✅ Verified Recruiter
+                </span>
+              )}
+            </div>
+          </div>
 
-                <div className="form-group">
-                  <label>
-                    New Email
-                    <span style={{ color: 'var(--muted)', fontWeight: 400, marginLeft: '0.35rem' }}>
-                      (leave blank to keep current)
-                    </span>
-                  </label>
-                  <input type="email" value={newEmail}
-                    onChange={e => setNewEmail(e.target.value)}
-                    placeholder="new@email.com" disabled={saving} />
-                </div>
+          {/* Remove picture button */}
+          {(avatarSrc && !picPreview) && (
+            <button
+              className="btn btn-danger btn-sm"
+              onClick={handleRemovePic}
+              disabled={removingPic}
+              style={{ alignSelf: 'flex-start' }}
+            >
+              {removingPic ? '⏳' : '🗑️'} Remove Photo
+            </button>
+          )}
+          {picPreview && (
+            <button
+              className="btn btn-secondary btn-sm"
+              onClick={() => { setPicFile(null); setPicPreview(null) }}
+              style={{ alignSelf: 'flex-start' }}
+            >
+              ✕ Cancel
+            </button>
+          )}
+        </div>
+      </div>
 
-                <div className="form-group">
-                  <label>
-                    New Password
-                    <span style={{ color: 'var(--muted)', fontWeight: 400, marginLeft: '0.35rem' }}>
-                      (leave blank to keep current)
-                    </span>
-                  </label>
-                  <input type="password" value={newPassword}
-                    onChange={e => setNewPassword(e.target.value)}
-                    placeholder="Min. 6 characters" disabled={saving} />
-                </div>
+      {/* Account Info (read-only) */}
+      <div className="card" style={{ marginBottom: '1.25rem' }}>
+        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1rem' }}>Account Info</h2>
+        <InfoRow label="Email" value={profile?.email} />
+        <InfoRow
+          label="Auth Provider"
+          value={
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              {isGoogle
+                ? <><span style={{ fontSize: '1rem' }}>🔵</span> Google</>
+                : <><span style={{ fontSize: '1rem' }}>📧</span> Email OTP</>
+              }
+            </span>
+          }
+        />
+        <InfoRow
+          label="Account Status"
+          value={
+            <span style={{
+              color: profile?.isActive !== false ? 'var(--success)' : 'var(--danger)',
+              fontWeight: 600,
+            }}>
+              {profile?.isActive !== false ? '✅ Active' : '🚫 Inactive'}
+            </span>
+          }
+        />
+      </div>
 
-                {(newEmail || newPassword) && (
-                  <div className="form-group">
-                    <label>
-                      Current Password
-                      <span style={{ color: 'var(--danger)', marginLeft: '0.2rem' }}>*</span>
-                    </label>
-                    <input type="password" value={currentPassword}
-                      onChange={e => setCurrentPassword(e.target.value)}
-                      placeholder="Required to confirm changes"
-                      disabled={saving} />
-                  </div>
-                )}
+      {/* Edit Form */}
+      <div className="card">
+        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1.25rem' }}>Edit Profile</h2>
+        <form onSubmit={handleSubmit} noValidate>
+
+          {/* Name */}
+          <div className="form-group">
+            <label htmlFor="name">Full Name</label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="Your full name"
+              disabled={saving}
+              maxLength={100}
+            />
+          </div>
+
+          {/* Profile Picture upload hint */}
+          <div className="form-group">
+            <label>Profile Picture</label>
+            <div
+              className="upload-zone"
+              onClick={() => fileInputRef.current?.click()}
+              style={{ padding: '1.25rem', cursor: 'pointer' }}
+            >
+              <div className="upload-zone-icon">🖼️</div>
+              <p style={{ fontSize: '0.875rem', margin: 0 }}>
+                {picFile
+                  ? `Selected: ${picFile.name}`
+                  : 'Click to upload a new photo (JPEG, PNG or WebP)'
+                }
+              </p>
+            </div>
+          </div>
+
+          {/* Role toggle — not shown to ADMINs */}
+          {!profile?.roles?.includes('ADMIN') && (
+            <div style={{ marginBottom: '1.25rem' }}>
+              <label style={{
+                display: 'block', fontSize: '0.85rem',
+                fontWeight: 600, color: 'var(--muted)', marginBottom: '0.35rem',
+              }}>
+                I am a...
+              </label>
+              <div className="role-toggle">
+                <button
+                  type="button"
+                  className={`role-option ${requestedRole === 'USER' ? 'active' : ''}`}
+                  onClick={() => setRequestedRole('USER')}
+                  disabled={saving}
+                >
+                  👤 Job Seeker
+                </button>
+                <button
+                  type="button"
+                  className={`role-option ${requestedRole === 'RECRUITER' ? 'active' : ''}`}
+                  onClick={() => setRequestedRole('RECRUITER')}
+                  disabled={saving}
+                >
+                  🏢 Recruiter
+                </button>
               </div>
-            </>
+              {requestedRole === 'RECRUITER' && !profile?.recruiterVerified && (
+                <p style={{ fontSize: '0.8rem', color: 'var(--warn)', marginTop: '0.4rem' }}>
+                  ⚠️ Recruiter access requires admin verification before job posting is enabled.
+                </p>
+              )}
+            </div>
           )}
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button type="submit" className="btn btn-primary" disabled={saving || removingPic}>
-              {saving ? '⏳ Saving…' : '💾 Save Changes'}
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="btn btn-primary btn-full"
+            disabled={saving}
+          >
+            {saving ? '⏳ Saving…' : '💾 Save Changes'}
+          </button>
         </form>
       </div>
-
-      {/* Account info */}
-      <div className="card">
-        <div style={{
-          fontSize: '0.78rem', fontWeight: 700, color: 'var(--muted)',
-          textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '1rem'
-        }}>
-          Account Info
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-          <InfoRow label="Roles" value={profile?.roles?.join(', ') || 'USER'} />
-          <InfoRow
-            label="Recruiter Status"
-            value={isRecruiter
-              ? (profile?.recruiterVerified ? '✅ Verified' : '⏳ Pending verification')
-              : '—'}
-            valueColor={isRecruiter
-              ? (profile?.recruiterVerified ? 'var(--success)' : 'var(--warn)')
-              : 'var(--muted)'}
-          />
-          <InfoRow label="Auth Provider" value={isGoogle ? '🔵 Google' : '🔑 Email & Password'} />
-        </div>
-        <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
-          <button className="btn btn-danger btn-sm" onClick={logout}>
-            🚪 Sign Out
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function InfoRow({ label, value, valueColor }) {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
-      <span style={{ color: 'var(--muted)' }}>{label}</span>
-      <span style={{ fontWeight: 600, color: valueColor || 'var(--text)' }}>{value}</span>
     </div>
   )
 }

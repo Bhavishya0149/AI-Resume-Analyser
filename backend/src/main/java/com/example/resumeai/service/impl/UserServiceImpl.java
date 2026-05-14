@@ -4,7 +4,6 @@ import com.example.resumeai.config.AppProperties;
 import com.example.resumeai.dto.user.UpdateUserRequest;
 import com.example.resumeai.dto.user.UserProfileResponse;
 import com.example.resumeai.entity.User;
-import com.example.resumeai.entity.enums.AuthProvider;
 import com.example.resumeai.entity.enums.Role;
 import com.example.resumeai.exception.*;
 import com.example.resumeai.repository.UserRepository;
@@ -12,7 +11,6 @@ import com.example.resumeai.service.CloudinaryService;
 import com.example.resumeai.service.UserService;
 import com.example.resumeai.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,13 +24,11 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final CloudinaryService cloudinaryService;
     private final AppProperties appProperties;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserProfileResponse getCurrentUserProfile() {
 
         String userId = SecurityUtil.getCurrentUserId();
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
@@ -55,8 +51,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        boolean isGoogle = user.getAuthProvider() == AuthProvider.GOOGLE;
-
         if (request != null && request.getName() != null && !request.getName().isBlank()) {
             user.setName(request.getName().trim());
         }
@@ -71,8 +65,8 @@ public class UserServiceImpl implements UserService {
             String contentType = profilePicture.getContentType();
             if (contentType == null ||
                     !(contentType.equals("image/jpeg") ||
-                            contentType.equals("image/png") ||
-                            contentType.equals("image/webp"))) {
+                      contentType.equals("image/png") ||
+                      contentType.equals("image/webp"))) {
                 throw new ApiException("Profile picture must be JPEG, PNG, or WebP");
             }
 
@@ -82,36 +76,6 @@ public class UserServiceImpl implements UserService {
 
             String imageUrl = cloudinaryService.uploadFile(profilePicture, "profile-pictures");
             user.setProfilePictureUrl(imageUrl);
-        }
-
-        if (request != null && request.getNewEmail() != null && !request.getNewEmail().isBlank()) {
-
-            if (isGoogle) {
-                throw new ForbiddenException("Google users cannot change their email");
-            }
-
-            validateCurrentPassword(user, request.getCurrentPassword());
-
-            if (userRepository.existsByEmail(request.getNewEmail())) {
-                throw new ConflictException("This email is already in use");
-            }
-
-            user.setEmail(request.getNewEmail());
-            user.setIsEmailVerified(false);
-        }
-
-        if (request != null && request.getNewPassword() != null && !request.getNewPassword().isBlank()) {
-
-            if (isGoogle) {
-                throw new ForbiddenException("Google users cannot set a password");
-            }
-
-            if (request.getNewPassword().length() < 6) {
-                throw new BadRequestException("New password must be at least 6 characters");
-            }
-
-            validateCurrentPassword(user, request.getCurrentPassword());
-            user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
         }
 
         if (request != null && request.getRequestedRole() != null && !request.getRequestedRole().isBlank()) {
@@ -147,14 +111,5 @@ public class UserServiceImpl implements UserService {
         user.setProfilePictureUrl(null);
         user.setUpdatedAt(Instant.now());
         userRepository.save(user);
-    }
-
-    private void validateCurrentPassword(User user, String currentPassword) {
-        if (currentPassword == null || currentPassword.isBlank()) {
-            throw new UnauthorizedException("Current password is required for this change");
-        }
-        if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
-            throw new UnauthorizedException("Current password is incorrect");
-        }
     }
 }

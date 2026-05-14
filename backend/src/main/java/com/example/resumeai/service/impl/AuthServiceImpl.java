@@ -5,10 +5,7 @@ import com.example.resumeai.dto.auth.*;
 import com.example.resumeai.entity.User;
 import com.example.resumeai.entity.enums.AuthProvider;
 import com.example.resumeai.entity.enums.Role;
-import com.example.resumeai.exception.ConflictException;
-import com.example.resumeai.exception.ForbiddenException;
-import com.example.resumeai.exception.NotFoundException;
-import com.example.resumeai.exception.UnauthorizedException;
+import com.example.resumeai.exception.*;
 import com.example.resumeai.repository.UserRepository;
 import com.example.resumeai.security.JwtUtil;
 import com.example.resumeai.service.AuthService;
@@ -16,14 +13,12 @@ import com.example.resumeai.service.EmailService;
 import com.example.resumeai.service.GoogleAuthService;
 import com.example.resumeai.util.OtpUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +26,6 @@ import java.util.stream.Collectors;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final OtpUtil otpUtil;
     private final AppProperties appProperties;
@@ -39,66 +33,70 @@ public class AuthServiceImpl implements AuthService {
     private final GoogleAuthService googleAuthService;
 
     @Override
-    public void signup(SignupRequest request) {
+    public void sendOtp(SendOtpRequest request) {
 
         String email = request.getEmail();
-        String password = request.getPassword();
-        String name = request.getName();
-
         if (email == null || email.isBlank()) {
-            throw new ForbiddenException("Email cannot be empty");
+            throw new BadRequestException("Email cannot be empty");
         }
 
-        if (password == null || password.isBlank()) {
-            throw new ForbiddenException("Password cannot be empty");
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if (user == null) {
+            String otp = otpUtil.generateOtp();
+
+            user = User.builder()
+                    .email(email)
+                    .authProvider(AuthProvider.LOCAL)
+                    .isEmailVerified(false)
+                    .otpCode(otp)
+                    .otpExpiresAt(Instant.now().plusSeconds(
+                            appProperties.getOtp().getExpiryMinutes() * 60L))
+                    .otpAttemptsLeft(appProperties.getOtp().getMaxAttempts())
+                    .otpResendAvailableAt(Instant.now().plusSeconds(
+                            appProperties.getOtp().getResendDelaySeconds()))
+                    .name("User")                          // generic default
+                    .roles(new HashSet<>(Set.of(Role.USER))) // default role
+                    .recruiterVerified(false)
+                    .isActive(true)
+                    .createdAt(Instant.now())
+                    .updatedAt(Instant.now())
+                    .build();   
+        } else {
+            // Returning user — just issue a new OTP
+            if (user.getOtpResendAvailableAt() != null &&
+                    user.getOtpResendAvailableAt().isAfter(Instant.now())) {
+                long secondsLeft = Duration.between(
+                        Instant.now(), user.getOtpResendAvailableAt()).getSeconds();
+                throw new ForbiddenException("OTP already sent. Try again in " + secondsLeft + " seconds");
+            }
+
+            String otp = otpUtil.generateOtp();
+            user.setOtpCode(otp);
+            user.setOtpExpiresAt(Instant.now().plusSeconds(
+                    appProperties.getOtp().getExpiryMinutes() * 60L));
+            user.setOtpAttemptsLeft(appProperties.getOtp().getMaxAttempts());
+            user.setOtpResendAvailableAt(Instant.now().plusSeconds(
+                    appProperties.getOtp().getResendDelaySeconds()));
+            user.setUpdatedAt(Instant.now());
         }
-
-        if (name == null || name.isBlank()) {
-            throw new ForbiddenException("Name cannot be empty");
-        }
-
-        if (userRepository.existsByEmail(email)) {
-            throw new ConflictException("Email already exists");
-        }
-
-        Role role = "RECRUITER".equalsIgnoreCase(request.getRequestedRole()) ? Role.RECRUITER : Role.USER;
-
-        String otp = otpUtil.generateOtp();
-
-        User user = User.builder()
-                .email(email)
-                .passwordHash(passwordEncoder.encode(password))
-                .authProvider(AuthProvider.LOCAL)
-                .isEmailVerified(false)
-                .otpCode(otp)
-                .otpExpiresAt(Instant.now().plusSeconds(appProperties.getOtp().getExpiryMinutes() * 60L))
-                .otpAttemptsLeft(appProperties.getOtp().getMaxAttempts())
-                .otpResendAvailableAt(Instant.now().plusSeconds(appProperties.getOtp().getResendDelaySeconds()))
-                .name(name)
-                .roles(new HashSet<>(Set.of(role)))
-                .recruiterVerified(false)
-                .isActive(true)
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
-                .build();
 
         userRepository.save(user);
-
-        emailService.sendOtpEmail(user.getEmail(), otp);
+        emailService.sendOtpEmail(email, user.getOtpCode());
     }
 
     @Override
-    public void verifyEmail(VerifyOtpRequest request) {
+    public AuthResponse verifyOtpAndLogin(VerifyOtpRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        if (user.getOtpAttemptsLeft() <= 0) {
-            throw new ForbiddenException("OTP attempts exceeded");
+        if (user.getOtpAttemptsLeft() == null || user.getOtpAttemptsLeft() <= 0) {
+            throw new ForbiddenException("OTP attempts exceeded. Please request a new OTP.");
         }
 
-        if (user.getOtpExpiresAt().isBefore(Instant.now())) {
-            throw new ForbiddenException("OTP expired");
+        if (user.getOtpExpiresAt() == null || user.getOtpExpiresAt().isBefore(Instant.now())) {
+            throw new ForbiddenException("OTP has expired. Please request a new one.");
         }
 
         if (!user.getOtpCode().equals(request.getOtp())) {
@@ -107,88 +105,69 @@ public class AuthServiceImpl implements AuthService {
             throw new UnauthorizedException("Invalid OTP");
         }
 
+        // OTP is valid — mark email verified, clear OTP fields
         user.setIsEmailVerified(true);
         user.setOtpCode(null);
         user.setOtpExpiresAt(null);
         user.setOtpAttemptsLeft(null);
         user.setOtpResendAvailableAt(null);
         user.setUpdatedAt(Instant.now());
-
         userRepository.save(user);
+
+        String token = jwtUtil.generateToken(
+                user.getId(),
+                user.getEmail(),
+                user.getRoles().stream().map(Enum::name).collect(Collectors.toSet())
+        );
+
+        return buildResponse(user, token);
     }
 
     @Override
-    public AuthResponse login(LoginRequest request) {
+    public AuthResponse googleLogin(LoginRequest request) {
 
-        if (request.getGoogleIdToken() != null && !request.getGoogleIdToken().isBlank()) {
+        if (request.getGoogleIdToken() == null || request.getGoogleIdToken().isBlank()) {
+            throw new BadRequestException("Google ID token is required");
+        }
 
-            GoogleAuthService.GoogleUser googleUser =
-                    googleAuthService.verifyToken(request.getGoogleIdToken());
+        GoogleAuthService.GoogleUser googleUser =
+                googleAuthService.verifyToken(request.getGoogleIdToken());
 
-            String email = googleUser.getEmail();
-            String sub = googleUser.getSub();
-            String name = googleUser.getName();
+        String email = googleUser.getEmail();
+        String sub = googleUser.getSub();
+        String name = googleUser.getName();
 
-            User user = userRepository.findByGoogleSub(sub).orElse(null);
+        // Try to find by Google sub first
+        User user = userRepository.findByGoogleSub(sub).orElse(null);
 
-            if (user == null) {
+        if (user == null) {
+            // Check if an account with this email already exists (LOCAL/OTP user)
+            User emailUser = userRepository.findByEmail(email).orElse(null);
 
-                User emailUser = userRepository.findByEmail(email).orElse(null);
-
-                if (emailUser != null) {
-
-                    if (emailUser.getAuthProvider() == AuthProvider.LOCAL) {
-                        throw new ConflictException(
-                                "Account registered with email/password. Use normal login."
-                        );
-                    }
-
-                    user = emailUser;
-
-                } else {
-
-                    user = User.builder()
-                            .email(email)
-                            .googleSub(sub)
-                            .authProvider(AuthProvider.GOOGLE)
-                            .isEmailVerified(true)
-                            .name(name)
-                            .roles(new HashSet<>(Set.of(Role.USER)))
-                            .recruiterVerified(false)
-                            .isActive(true)
-                            .createdAt(Instant.now())
-                            .updatedAt(Instant.now())
-                            .build();
-
-                    userRepository.save(user);
-                }
+            if (emailUser != null) {
+                // Merge: link the Google sub to the existing account
+                emailUser.setGoogleSub(sub);
+                // If they were LOCAL, update provider to show both are supported
+                // We keep authProvider as-is but link the sub so next Google login finds them
+                emailUser.setUpdatedAt(Instant.now());
+                userRepository.save(emailUser);
+                user = emailUser;
+            } else {
+                // Brand new user via Google
+                user = User.builder()
+                        .email(email)
+                        .googleSub(sub)
+                        .authProvider(AuthProvider.GOOGLE)
+                        .isEmailVerified(true)
+                        .name(name)
+                        .roles(new HashSet<>(Set.of(Role.USER)))
+                        .recruiterVerified(false)
+                        .isActive(true)
+                        .createdAt(Instant.now())
+                        .updatedAt(Instant.now())
+                        .build();
+                userRepository.save(user);
             }
-
-            String token = jwtUtil.generateToken(
-                    user.getId(),
-                    user.getEmail(),
-                    user.getRoles().stream().map(Enum::name).collect(Collectors.toSet())
-            );
-
-            return buildResponse(user, token);
-        }
-
-        // PASSWORD LOGIN
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UnauthorizedException("Invalid credentials"));
-
-        if (user.getAuthProvider() == AuthProvider.GOOGLE) {
-            throw new ConflictException(
-                    "Account registered with Google. Use Google login."
-            );
-        }
-
-        if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            throw new UnauthorizedException("Invalid credentials");
-        }
-
-        if (!Boolean.TRUE.equals(user.getIsEmailVerified())) {
-            throw new ForbiddenException("Email not verified");
         }
 
         String token = jwtUtil.generateToken(
@@ -200,8 +179,33 @@ public class AuthServiceImpl implements AuthService {
         return buildResponse(user, token);
     }
 
-    private AuthResponse buildResponse(User user, String token) {
+    @Override
+    public void resendOtp(String email) {
 
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        if (user.getOtpResendAvailableAt() != null &&
+                user.getOtpResendAvailableAt().isAfter(Instant.now())) {
+            long secondsLeft = Duration.between(
+                    Instant.now(), user.getOtpResendAvailableAt()).getSeconds();
+            throw new ForbiddenException("Resend OTP available in " + secondsLeft + " seconds");
+        }
+
+        String otp = otpUtil.generateOtp();
+        user.setOtpCode(otp);
+        user.setOtpExpiresAt(Instant.now().plusSeconds(
+                appProperties.getOtp().getExpiryMinutes() * 60L));
+        user.setOtpAttemptsLeft(appProperties.getOtp().getMaxAttempts());
+        user.setOtpResendAvailableAt(Instant.now().plusSeconds(
+                appProperties.getOtp().getResendDelaySeconds()));
+        user.setUpdatedAt(Instant.now());
+
+        userRepository.save(user);
+        emailService.sendOtpEmail(email, otp);
+    }
+
+    private AuthResponse buildResponse(User user, String token) {
         return AuthResponse.builder()
                 .accessToken(token)
                 .user(AuthResponse.UserInfo.builder()
@@ -211,97 +215,5 @@ public class AuthServiceImpl implements AuthService {
                         .roles(user.getRoles().stream().map(Enum::name).collect(Collectors.toSet()))
                         .build())
                 .build();
-    }
-
-    @Override
-    public void requestPasswordReset(String email) {
-
-        userRepository.findByEmail(email).ifPresent(user -> {
-
-            String token = generateResetToken();
-
-            user.setPasswordResetToken(token);
-            user.setPasswordResetTokenExpiry(Instant.now().plusSeconds(15 * 60));
-            user.setUpdatedAt(Instant.now());
-
-            userRepository.save(user);
-
-            String resetLink = "http://localhost:3000/reset-password?token=" + token;
-
-            emailService.sendPasswordResetEmail(user.getEmail(), resetLink);
-        });
-    }
-
-    @Override
-    public void resetPasswordWithToken(ResetPasswordWithTokenRequest request) {
-
-        User user = userRepository.findByPasswordResetToken(request.getToken())
-                .orElseThrow(() -> new NotFoundException("Invalid or expired token"));
-
-        if (user.getPasswordResetTokenExpiry() == null ||
-                user.getPasswordResetTokenExpiry().isBefore(Instant.now())) {
-            throw new ForbiddenException("Reset token expired");
-        }
-
-        String newPassword = request.getNewPassword();
-
-        if (newPassword == null || newPassword.isBlank()) {
-            throw new ForbiddenException("Password cannot be empty");
-        }
-
-        user.setPasswordHash(passwordEncoder.encode(newPassword));
-        user.setPasswordResetToken(null);
-        user.setPasswordResetTokenExpiry(null);
-        user.setUpdatedAt(Instant.now());
-
-        userRepository.save(user);
-    }
-
-    private String generateResetToken() {
-        return UUID.randomUUID().toString().replace("-", "");
-    }
-
-    @Override
-    public void resendOtp(String email) {
-
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("User not found"));
-
-        if (user.getAuthProvider() != AuthProvider.LOCAL) {
-            throw new ConflictException("OTP not applicable for Google accounts");
-        }
-
-        if (Boolean.TRUE.equals(user.getIsEmailVerified())) {
-            throw new ConflictException("Email already verified");
-        }
-
-        if (user.getOtpResendAvailableAt() != null &&
-                user.getOtpResendAvailableAt().isAfter(Instant.now())) {
-
-            long secondsLeft = Duration.between(
-                    Instant.now(),
-                    user.getOtpResendAvailableAt()
-            ).getSeconds();
-
-            throw new ForbiddenException(
-                    "Resend OTP available in " + secondsLeft + " seconds"
-            );
-        }
-
-        String otp = otpUtil.generateOtp();
-
-        user.setOtpCode(otp);
-        user.setOtpExpiresAt(
-                Instant.now().plusSeconds(appProperties.getOtp().getExpiryMinutes() * 60L)
-        );
-        user.setOtpAttemptsLeft(appProperties.getOtp().getMaxAttempts());
-        user.setOtpResendAvailableAt(
-                Instant.now().plusSeconds(appProperties.getOtp().getResendDelaySeconds())
-        );
-        user.setUpdatedAt(Instant.now());
-
-        userRepository.save(user);
-
-        emailService.sendOtpEmail(user.getEmail(), otp);
     }
 }

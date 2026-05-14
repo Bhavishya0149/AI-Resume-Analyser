@@ -4,8 +4,9 @@ import com.example.resumeai.dto.auth.*;
 import com.example.resumeai.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Map;
 
 @RestController
@@ -15,44 +16,25 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/signup")
-    public String signup(@Valid @RequestBody SignupRequest request) {
-        authService.signup(request);
-        return "Signup successful. Please verify your email with OTP.";
+    @PostMapping("/send-otp")
+    public ResponseEntity<?> sendOtp(@Valid @RequestBody SendOtpRequest request) {
+        authService.sendOtp(request);
+        return ResponseEntity.ok(Map.of("message", "OTP sent to " + request.getEmail()));
     }
 
-    @PostMapping("/verify-email")
-    public String verifyEmail(@Valid @RequestBody VerifyOtpRequest request) {
-        authService.verifyEmail(request);
-        return "Email verified successfully";
+    @PostMapping("/verify-otp")
+    public AuthResponse verifyOtp(@Valid @RequestBody VerifyOtpRequest request) {
+        return authService.verifyOtpAndLogin(request);
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody LoginRequest request) {
-        return authService.login(request);
-    }
-
-    @PostMapping("/request-password-reset")
-    public ResponseEntity<?> requestPasswordReset(@RequestParam String email) {
-        authService.requestPasswordReset(email);
-        return ResponseEntity.ok(
-                Map.of("message", "If the email exists, reset link has been sent")
-        );
-    }
-
-    @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordWithTokenRequest request) {
-        authService.resetPasswordWithToken(request);
-        return ResponseEntity.ok(
-                Map.of("message", "Password reset successful")
-        );
+    public AuthResponse googleLogin(@RequestBody LoginRequest request) {
+        return authService.googleLogin(request);
     }
 
     @PostMapping("/resend-otp")
     public ResponseEntity<?> resendOtp(@RequestParam String email) {
         authService.resendOtp(email);
-        return ResponseEntity.ok(
-                Map.of("message", "OTP resent successfully")
-        );
+        return ResponseEntity.ok(Map.of("message", "OTP resent successfully"));
     }
 }

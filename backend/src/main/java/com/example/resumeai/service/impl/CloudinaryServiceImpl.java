@@ -107,13 +107,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
     private String toViewableUrl(String url, String contentType) {
         String encoded = URLEncoder.encode(url, StandardCharsets.UTF_8);
-        if (contentType != null && (
-                contentType.equals("application/msword") ||
-                contentType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))) {
-            
-            return "https://view.officeapps.live.com/op/view.aspx?src=" + encoded;
-        }
-        
-        return "https://docs.google.com/viewer?url=" + encoded + "&embedded=true";
+
+        return "https://docs.google.com/gview?embedded=true&url=" + encoded;
     }
 }
