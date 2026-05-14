@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
-from pipeline import ResumeAnalyzerPipeline
+
+from src.pipeline import ResumeAnalyzerPipeline
+# from pipeline import ResumeAnalyzerPipeline
 
 app = Flask(__name__)
 
