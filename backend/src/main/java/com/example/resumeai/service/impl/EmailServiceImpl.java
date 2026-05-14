@@ -1,18 +1,31 @@
 package com.example.resumeai.service.impl;
 
 import com.example.resumeai.service.EmailService;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    private final JavaMailSender mailSender;
+    private final RestTemplate restTemplate;
+
+    @Value("${resend.api.key}")
+    private String resendApiKey;
+
+    @Value("${resend.from.email}")
+    private String fromEmail;
+
+    private static final String RESEND_API_URL = "https://api.resend.com/emails";
 
     @Override
     public void sendOtpEmail(String toEmail, String otp) {
@@ -71,80 +84,38 @@ public class EmailServiceImpl implements EmailService {
         sendHtmlEmail(toEmail, "Your Verification Code", html);
     }
 
-    @Override
-    public void sendPasswordResetEmail(String to, String resetLink) {
-        String html = """
-            <!DOCTYPE html>
-            <html>
-            <body style="margin:0;padding:0;background-color:#f4f4f7;font-family:Arial,sans-serif;">
-              <table width="100%%" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td align="center" style="padding:40px 0;">
-                    <table width="480" cellpadding="0" cellspacing="0"
-                           style="background:#ffffff;border-radius:8px;
-                                  box-shadow:0 2px 8px rgba(0,0,0,0.08);overflow:hidden;">
-                      <tr>
-                        <td style="background:#dc2626;padding:28px 40px;">
-                          <h1 style="margin:0;color:#ffffff;font-size:22px;">
-                            🔐 Password Reset Request
-                          </h1>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding:36px 40px;">
-                          <p style="margin:0 0 20px;color:#374151;font-size:15px;">
-                            We received a request to reset your password.
-                            Click the button below — this link expires in
-                            <strong>15 minutes</strong>.
-                          </p>
-                          <div style="text-align:center;margin:28px 0;">
-                            <a href="%s"
-                               style="display:inline-block;background:#dc2626;color:#ffffff;
-                                      text-decoration:none;font-size:15px;font-weight:600;
-                                      padding:14px 36px;border-radius:6px;">
-                              Reset My Password
-                            </a>
-                          </div>
-                          <p style="margin:0 0 8px;color:#6b7280;font-size:13px;">
-                            Or copy and paste this link into your browser:
-                          </p>
-                          <p style="margin:0;word-break:break-all;color:#4f46e5;font-size:12px;">
-                            %s
-                          </p>
-                          <hr style="margin:24px 0;border:none;border-top:1px solid #e5e7eb;" />
-                          <p style="margin:0;color:#9ca3af;font-size:12px;">
-                            If you did not request a password reset, you can safely ignore this email.
-                          </p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="background:#f9fafb;padding:16px 40px;
-                                   border-top:1px solid #e5e7eb;">
-                          <p style="margin:0;color:#9ca3af;font-size:12px;">
-                            © 2025 AI Resume Analyser. All rights reserved.
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </body>
-            </html>
-            """.formatted(resetLink, resetLink);
-
-        sendHtmlEmail(to, "Reset Your Password", html);
-    }
-
     private void sendHtmlEmail(String to, String subject, String htmlBody) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(resendApiKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, Object> requestBody = Map.of(
+                "from", fromEmail,
+                "to", List.of(to),
+                "subject", subject,
+                "html", htmlBody
+        );
+
+        HttpEntity<Map<String, Object>> request =
+                new HttpEntity<>(requestBody, headers);
+
         try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(htmlBody, true); 
-            mailSender.send(message);
-        } catch (MessagingException e) {
+            ResponseEntity<String> response = restTemplate.postForEntity(
+                    RESEND_API_URL,
+                    request,
+                    String.class
+            );
+
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException(
+                        "Failed to send email. Resend API returned: "
+                                + response.getStatusCode()
+                                + " - "
+                                + response.getBody()
+                );
+            }
+
+        } catch (Exception e) {
             throw new RuntimeException("Failed to send email to " + to, e);
         }
     }

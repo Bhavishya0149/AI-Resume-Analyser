@@ -1,16 +1,10 @@
 import os
 
-from src.preprocessing import preprocess_text
-from src.skill_extractor import SkillExtractor
-from src.tfidf_engine import TfidfSimilarity
-from src.scorer import ResumeScorer
-from src.embedding_engine import EmbeddingSimilarity
-
-# from preprocessing import preprocess_text
-# from skill_extractor import SkillExtractor
-# from tfidf_engine import TfidfSimilarity
-# from scorer import ResumeScorer
-# from embedding_engine import EmbeddingSimilarity
+from preprocessing import preprocess_text
+from skill_extractor import SkillExtractor
+from tfidf_engine import TfidfSimilarity
+from scorer import ResumeScorer
+from embedding_engine import EmbeddingSimilarity
 
 
 class ResumeAnalyzerPipeline:

@@ -1,20 +1,21 @@
 import re
 import spacy
-import nltk
 from nltk.corpus import stopwords
 
-# Ensure NLTK stopwords are available
-try:
-    STOPWORDS = set(stopwords.words("english"))
-except LookupError:
-    nltk.download("stopwords")
-    STOPWORDS = set(stopwords.words("english"))
-
-# Load spaCy model once
+# Load spaCy model once (important for performance)
 nlp = spacy.load("en_core_web_sm")
+
+# Load stopwords once
+STOPWORDS = set(stopwords.words("english"))
 
 
 def clean_text(text: str) -> str:
+    """
+    Basic cleaning:
+    - Lowercase
+    - Remove special characters
+    - Remove extra whitespace
+    """
     text = text.lower()
     text = re.sub(r"[^a-z0-9\s]", " ", text)
     text = re.sub(r"\s+", " ", text).strip()
@@ -22,6 +23,14 @@ def clean_text(text: str) -> str:
 
 
 def preprocess_text(text: str) -> str:
+    """
+    Full preprocessing pipeline using spaCy:
+    1. Clean text
+    2. Tokenize with spaCy
+    3. Remove stopwords
+    4. Lemmatize
+    5. Return processed string
+    """
     text = clean_text(text)
 
     doc = nlp(text)

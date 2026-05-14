@@ -1,9 +1,7 @@
 import sys
 import json
 import argparse
-
-from src.pipeline import ResumeAnalyzerPipeline
-# from pipeline import ResumeAnalyzerPipeline
+from pipeline import ResumeAnalyzerPipeline
 
 
 def read_file(path: str) -> str:
