@@ -18,24 +18,22 @@ export default function EditJobPage() {
   const [showWarn, setShowWarn]   = useState(false)
 
   useEffect(() => {
-    api.get('/api/jobs/public')
-      .then(res => {
-        const job = res.data.find(j => j.id === id)
-        if (!job) return navigate('/jobs')
-        const isOwner = job.createdBy === user?.id || user?.roles?.includes('ADMIN')
-        if (!isOwner) return navigate(`/jobs/${id}`)
-        setForm({
-          title: job.title || '',
-          descriptionText: job.descriptionText || '',
-          shortDescription: job.shortDescription || '',
-          organisationName: job.organisationName || '',
-          isPublic: job.isPublic ?? false,
-          allowApplications: job.allowApplications ?? true,
-          contactEmail: job.contactEmail || '',
-          contactPhone: job.contactPhone || '',
-        })
-        setOriginalDesc(job.descriptionText || '')
+    api.get('/api/jobs/my')
+    .then(res => {
+      const job = res.data.find(j => j.id === id)
+      if (!job) return navigate('/jobs/my')
+      setForm({
+        title: job.title || '',
+        descriptionText: job.descriptionText || '',
+        shortDescription: job.shortDescription || '',
+        organisationName: job.organisationName || '',
+        isPublic: job.isPublic ?? false,
+        allowApplications: job.allowApplications ?? true,
+        contactEmail: job.contactEmail || '',
+        contactPhone: job.contactPhone || '',
       })
+      setOriginalDesc(job.descriptionText || '')
+    })
       .catch(() => setError('Failed to load job.'))
       .finally(() => setLoading(false))
   }, [id])

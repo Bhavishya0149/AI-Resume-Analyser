@@ -24,14 +24,24 @@ export default function JobDetailsPage() {
 
   useEffect(() => {
     Promise.all([
-      api.get(`/api/jobs/public`),
+      api.get('/api/jobs/my'),
       api.get('/api/resumes'),
-    ]).then(([jobsRes, resumesRes]) => {
-      const found = jobsRes.data.find(j => j.id === id)
-      if (!found) navigate('/jobs')
-      setJob(found)
-      setResumes(resumesRes.data)
-      if (resumesRes.data.length > 0) setSelectedResume(resumesRes.data[0].id)
+    ]).then(([myJobsRes, resumesRes]) => {
+      let found = myJobsRes.data.find(j => j.id === id)
+      if (found) {
+        setJob(found)
+        setResumes(resumesRes.data)
+        if (resumesRes.data.length > 0) setSelectedResume(resumesRes.data[0].id)
+        return
+      }
+      // Not in my jobs — fall back to public listing
+      api.get('/api/jobs/public').then(publicRes => {
+        const publicJob = publicRes.data.find(j => j.id === id)
+        if (!publicJob) return navigate('/jobs')
+        setJob(publicJob)
+        setResumes(resumesRes.data)
+        if (resumesRes.data.length > 0) setSelectedResume(resumesRes.data[0].id)
+      }).catch(() => setError('Failed to load job details.'))
     }).catch(() => setError('Failed to load job details.'))
       .finally(() => setLoading(false))
   }, [id])

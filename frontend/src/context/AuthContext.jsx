@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import api from '../api/axios'
 
 const AuthContext = createContext()
 
@@ -7,6 +8,20 @@ export function AuthProvider({ children }) {
     try { return JSON.parse(localStorage.getItem('user')) } catch { return null }
   })
   const [token, setToken] = useState(() => localStorage.getItem('token') || null)
+
+  useEffect(() => {
+    if (!token) return
+    api.get('/api/users/me')
+      .then(({ data }) => {
+        setUser(prev => {
+          if (!prev) return prev
+          const updated = { ...prev, profilePictureUrl: data.profilePictureUrl, name: data.name }
+          localStorage.setItem('user', JSON.stringify(updated))
+          return updated
+        })
+      })
+      .catch(() => {})
+  }, [token])
 
   const login = (authResponse) => {
     const { accessToken, user: userInfo } = authResponse

@@ -3,6 +3,7 @@ import api from '../api/axios'
 import ErrorAlert from '../components/ErrorAlert'
 import LoadingSpinner from '../components/LoadingSpinner'
 
+
 function InfoRow({ label, value }) {
   return (
     <div style={{
@@ -20,6 +21,7 @@ function InfoRow({ label, value }) {
   )
 }
 
+
 export default function ProfilePage() {
   const [profile, setProfile]   = useState(null)
   const [loading, setLoading]   = useState(true)
@@ -27,9 +29,11 @@ export default function ProfilePage() {
   const [error, setError]       = useState('')
   const [success, setSuccess]   = useState('')
 
+
   // Editable fields
   const [name, setName]                 = useState('')
   const [requestedRole, setRequestedRole] = useState('USER')
+
 
   // Profile picture
   const [picFile, setPicFile]       = useState(null)
@@ -37,9 +41,11 @@ export default function ProfilePage() {
   const [removingPic, setRemovingPic] = useState(false)
   const fileInputRef = useRef()
 
+
   useEffect(() => {
     fetchProfile()
   }, [])
+
 
   const fetchProfile = async () => {
     setLoading(true)
@@ -60,12 +66,14 @@ export default function ProfilePage() {
     }
   }
 
+
   const handlePicChange = (e) => {
     const file = e.target.files?.[0]
     if (!file) return
     setPicFile(file)
     setPicPreview(URL.createObjectURL(file))
   }
+
 
   const handleRemovePic = async () => {
     setError('')
@@ -84,26 +92,38 @@ export default function ProfilePage() {
     }
   }
 
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
     setSuccess('')
 
-    const hasNameChange = name.trim() && name.trim() !== profile?.name
+    const trimmedName = name.trim()
+
+    // Name length validation
+    if (trimmedName && (trimmedName.length < 2 || trimmedName.length > 30)) {
+      setError('Name must be between 2 and 30 characters.')
+      return
+    }
+
+    const hasNameChange = trimmedName && trimmedName !== profile?.name
     const currentRole   = profile?.roles?.includes('RECRUITER') ? 'RECRUITER' : 'USER'
     const hasRoleChange = requestedRole !== currentRole
     const hasPicChange  = !!picFile
+
 
     if (!hasNameChange && !hasRoleChange && !hasPicChange) {
       setError('No changes to save.')
       return
     }
 
+
     setSaving(true)
     try {
       const payload = {}
-      if (hasNameChange)  payload.name = name.trim()
+      if (hasNameChange)  payload.name = trimmedName
       if (hasRoleChange)  payload.requestedRole = requestedRole
+
 
       const formData = new FormData()
       if (Object.keys(payload).length > 0) {
@@ -113,9 +133,11 @@ export default function ProfilePage() {
         formData.append('profilePicture', picFile)
       }
 
+
       await api.put('/api/users/me', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
+
 
       setSuccess('Profile updated successfully.')
       setPicFile(null)
@@ -128,11 +150,13 @@ export default function ProfilePage() {
     }
   }
 
+
   if (loading) return <LoadingSpinner text="Loading profile…" />
+
 
   const avatarSrc = picPreview || profile?.profilePictureUrl
   const initials  = profile?.name?.charAt(0)?.toUpperCase() || '?'
-  const isGoogle  = profile?.authProvider === 'GOOGLE'
+
 
   return (
     <div style={{ maxWidth: 680, margin: '0 auto' }}>
@@ -141,16 +165,19 @@ export default function ProfilePage() {
         <h1 className="page-title">My <span>Profile</span></h1>
       </div>
 
+
       <ErrorAlert
         message={error}
         onClose={() => setError('')}
       />
+
 
       {success && (
         <div className="alert alert-success" style={{ marginBottom: '1rem' }}>
           ✅ {success}
         </div>
       )}
+
 
       {/* Avatar Section */}
       <div className="card" style={{ marginBottom: '1.25rem' }}>
@@ -187,6 +214,7 @@ export default function ProfilePage() {
             style={{ display: 'none' }}
             onChange={handlePicChange}
           />
+
 
           {/* Name + Role badges */}
           <div style={{ flex: 1 }}>
@@ -227,61 +255,52 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Remove picture button */}
-          {(avatarSrc && !picPreview) && (
-            <button
-              className="btn btn-danger btn-sm"
-              onClick={handleRemovePic}
-              disabled={removingPic}
-              style={{ alignSelf: 'flex-start' }}
-            >
-              {removingPic ? '⏳' : '🗑️'} Remove Photo
-            </button>
-          )}
-          {picPreview && (
-            <button
-              className="btn btn-secondary btn-sm"
-              onClick={() => { setPicFile(null); setPicPreview(null) }}
-              style={{ alignSelf: 'flex-start' }}
-            >
-              ✕ Cancel
-            </button>
-          )}
+
+          {/* Photo action buttons */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignSelf: 'flex-start' }}>
+            {!picPreview && (
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                📷 Upload Photo
+              </button>
+            )}
+            {(avatarSrc && !picPreview) && (
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={handleRemovePic}
+                disabled={removingPic}
+              >
+                {removingPic ? '⏳' : '🗑️'} Remove Photo
+              </button>
+            )}
+            {picPreview && (
+              <button
+                className="btn btn-secondary btn-sm"
+                onClick={() => { setPicFile(null); setPicPreview(null) }}
+              >
+                ✕ Cancel
+              </button>
+            )}
+          </div>
         </div>
       </div>
+
 
       {/* Account Info (read-only) */}
       <div className="card" style={{ marginBottom: '1.25rem' }}>
         <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1rem' }}>Account Info</h2>
         <InfoRow label="Email" value={profile?.email} />
-        <InfoRow
-          label="Auth Provider"
-          value={
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              {isGoogle
-                ? <><span style={{ fontSize: '1rem' }}>🔵</span> Google</>
-                : <><span style={{ fontSize: '1rem' }}>📧</span> Email OTP</>
-              }
-            </span>
-          }
-        />
-        <InfoRow
-          label="Account Status"
-          value={
-            <span style={{
-              color: profile?.isActive !== false ? 'var(--success)' : 'var(--danger)',
-              fontWeight: 600,
-            }}>
-              {profile?.isActive !== false ? '✅ Active' : '🚫 Inactive'}
-            </span>
-          }
-        />
       </div>
+
 
       {/* Edit Form */}
       <div className="card">
         <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1.25rem' }}>Edit Profile</h2>
         <form onSubmit={handleSubmit} noValidate>
+
 
           {/* Name */}
           <div className="form-group">
@@ -293,27 +312,14 @@ export default function ProfilePage() {
               onChange={e => setName(e.target.value)}
               placeholder="Your full name"
               disabled={saving}
-              maxLength={100}
+              minLength={2}
+              maxLength={30}
             />
+            <small style={{ color: 'var(--muted)', fontSize: '0.78rem' }}>
+              {name.trim().length}/30 characters (min 2)
+            </small>
           </div>
 
-          {/* Profile Picture upload hint */}
-          <div className="form-group">
-            <label>Profile Picture</label>
-            <div
-              className="upload-zone"
-              onClick={() => fileInputRef.current?.click()}
-              style={{ padding: '1.25rem', cursor: 'pointer' }}
-            >
-              <div className="upload-zone-icon">🖼️</div>
-              <p style={{ fontSize: '0.875rem', margin: 0 }}>
-                {picFile
-                  ? `Selected: ${picFile.name}`
-                  : 'Click to upload a new photo (JPEG, PNG or WebP)'
-                }
-              </p>
-            </div>
-          </div>
 
           {/* Role toggle — not shown to ADMINs */}
           {!profile?.roles?.includes('ADMIN') && (
@@ -349,6 +355,7 @@ export default function ProfilePage() {
               )}
             </div>
           )}
+
 
           <button
             type="submit"

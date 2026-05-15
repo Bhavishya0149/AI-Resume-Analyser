@@ -30,9 +30,10 @@ export default function LoginPage() {
     e.preventDefault()
     setError('')
     if (!email.trim()) return setError('Please enter your email.')
-
-
-
+    if (!email.trim().split('@')[1]?.includes('.')) {
+      return setError('Please enter a valid email address.')
+    }
+    
     setLoading(true)
     try {
       await api.post('/api/auth/send-otp', { email: email.trim() })

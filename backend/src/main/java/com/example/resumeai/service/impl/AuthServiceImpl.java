@@ -212,6 +212,7 @@ public class AuthServiceImpl implements AuthService {
                         .id(user.getId())
                         .email(user.getEmail())
                         .name(user.getName())
+                        .profilePictureUrl(user.getProfilePictureUrl())
                         .roles(user.getRoles().stream().map(Enum::name).collect(Collectors.toSet()))
                         .build())
                 .build();
